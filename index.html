@@ -9,36 +9,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Kanit', sans-serif; background-color: #1a1c2e; color: white; margin: 0; }
-        .hidden { display: none !important; }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
     </style>
 </head>
 <body>
 
-    <div id="loginPage" class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-[#252841] p-8 rounded-3xl shadow-2xl w-full max-w-md border border-gray-700">
-            <div class="text-center mb-8">
-                <i class="fas fa-user-shield text-5xl text-indigo-500 mb-4"></i>
-                <h1 class="text-2xl font-bold">เข้าสู่ระบบเช็คชื่อ</h1>
-            </div>
-            <div class="space-y-4">
-                <input type="email" id="email" placeholder="อีเมลของคุณครู" class="w-full bg-[#1a1c2e] border border-gray-600 rounded-xl p-3 focus:outline-none focus:border-indigo-500 transition-all text-white">
-                <input type="password" id="password" placeholder="รหัสผ่าน" class="w-full bg-[#1a1c2e] border border-gray-600 rounded-xl p-3 focus:outline-none focus:border-indigo-500 transition-all text-white">
-                <p id="loginError" class="text-red-400 text-sm hidden text-center"></p>
-                <button id="btnLogin" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded-xl font-bold transition-all shadow-lg text-white">เข้าสู่ระบบ</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="mainPage" class="hidden min-h-screen p-4 md:p-10">
+    <div id="mainPage" class="min-h-screen p-4 md:p-10">
         <div class="max-w-6xl mx-auto flex justify-between items-center mb-8">
             <div>
                 <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">ระบบเช็คชื่อนักเรียน</h1>
                 <p class="text-gray-400">จัดการข้อมูลและเช็คชื่อแบบ Real-time</p>
             </div>
-            <button id="btnLogout" class="bg-red-500/10 text-red-400 border border-red-500/50 px-4 py-2 rounded-xl hover:bg-red-500 hover:text-white transition-all">
-                <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
-            </button>
         </div>
 
         <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
@@ -57,14 +38,15 @@
         </div>
 
         <div id="studentGrid" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
-            </div>
+            <p class="col-span-full text-center text-gray-500 py-10">กำลังเชื่อมต่อฐานข้อมูล...</p>
+        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+        // รหัสเชื่อมต่อ Firebase ของคุณครู
         const firebaseConfig = {
             apiKey: "AIzaSyCAaWoYfgWqBx8O1JlKuiOMmy6O2Y3cb9Q",
             authDomain: "mycheckin-ba316.firebaseapp.com",
@@ -76,39 +58,10 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
         const db = getDatabase(app);
 
-        // ตรวจสอบสถานะ Login
-        onAuthStateChanged(auth, (user) => {
-            const loginPage = document.getElementById('loginPage');
-            const mainPage = document.getElementById('mainPage');
-            if (user) {
-                loginPage.classList.add('hidden');
-                mainPage.classList.remove('hidden');
-                loadStudents();
-            } else {
-                loginPage.classList.remove('hidden');
-                mainPage.classList.add('hidden');
-            }
-        });
-
-        // ฟังก์ชัน Login
-        document.getElementById('btnLogin').addEventListener('click', async () => {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorMsg = document.getElementById('loginError');
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                errorMsg.classList.add('hidden');
-            } catch (error) {
-                errorMsg.innerText = "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
-                errorMsg.classList.remove('hidden');
-            }
-        });
-
-        // ฟังก์ชัน Logout
-        document.getElementById('btnLogout').addEventListener('click', () => signOut(auth));
+        // เริ่มต้นโหลดข้อมูลทันที
+        loadStudents();
 
         // ฟังก์ชันเพิ่มนักเรียน
         document.getElementById('btnAddStd').addEventListener('click', () => {
@@ -122,7 +75,7 @@
             } else { alert("กรุณากรอกรหัสและชื่อนักเรียน"); }
         });
 
-        // ฟังก์ชันเช็คชื่อ (ทำผ่าน window เพื่อให้เรียกจาก HTML ที่สร้างใหม่ได้)
+        // ฟังก์ชันเช็คชื่อ (Global function สำหรับปุ่มที่สร้างจาก JS)
         window.checkAttendance = (id, name, status) => {
             const date = document.getElementById('checkDate').value;
             if (!date) return alert("กรุณาเลือกวันที่");
@@ -131,7 +84,9 @@
                 status: status,
                 timestamp: new Date().toLocaleTimeString('th-TH')
             }).then(() => { 
-                alert("บันทึก " + name + " (" + status + ") เรียบร้อย"); 
+                console.log("บันทึกสำเร็จ");
+                // เปลี่ยนสีปุ่มชั่วคราวเพื่อบอกว่ากดแล้ว
+                alert("บันทึก " + name + " (" + status + ") เรียบร้อย");
             });
         };
 
@@ -142,7 +97,7 @@
             }
         };
 
-        // โหลดข้อมูลนักเรียน
+        // โหลดข้อมูลนักเรียนจาก Firebase
         function loadStudents() {
             onValue(ref(db, 'students'), (snapshot) => {
                 const grid = document.getElementById('studentGrid');
@@ -161,7 +116,7 @@
                                         ${std.name.charAt(0)}
                                     </div>
                                     <div>
-                                        <h3 class="font-bold text-lg">${std.name}</h3>
+                                        <h3 class="font-bold text-lg text-white">${std.name}</h3>
                                         <p class="text-sm text-gray-400">ID: ${id}</p>
                                     </div>
                                 </div>
@@ -178,7 +133,7 @@
             });
         }
 
-        // ตั้งค่าวันที่ปัจจุบันเป็นค่าเริ่มต้น
+        // ตั้งค่าวันที่ปัจจุบัน
         document.getElementById('checkDate').valueAsDate = new Date();
     </script>
 </body>
