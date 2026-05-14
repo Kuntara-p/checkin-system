@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCIENCE SMART SYSTEM - BAN KHUAN NIANG SCHOOL V16</title>
+    <title>SCIENCE SMART SYSTEM - BAN KHUAN NIANG SCHOOL V18</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -22,7 +22,6 @@
             @page { size: A4 landscape; margin: 5mm; }
         }
         .nav-tab.active { background-color: white; color: #15803d; border-radius: 8px 8px 0 0; font-weight: bold; border-top: 4px solid #15803d; }
-        /* สไตล์สำหรับปุ่มที่ถูกล็อก */
         .btn-locked { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
     </style>
 </head>
@@ -32,7 +31,7 @@
         <div class="container mx-auto px-4 pt-4">
             <div class="flex items-center gap-3 mb-4">
                 <i class="fas fa-microscope text-2xl text-lime-400"></i>
-                <h1 class="text-xl font-bold uppercase">Science Smart Class</h1>
+                <h1 class="text-xl font-bold uppercase tracking-wide">Science Smart Class</h1>
             </div>
             <div class="flex gap-2">
                 <button onclick="showView('checkin')" id="tab-checkin" class="nav-tab active px-6 py-2 text-sm transition-all">เช็คเวลาเรียนประจำวัน</button>
@@ -47,19 +46,15 @@
             <div class="flex flex-wrap items-center gap-4">
                 <div class="flex flex-col">
                     <label class="text-xs text-slate-400 font-bold mb-1">ปีการศึกษา</label>
-                    <select id="mainYear" onchange="loadData()" class="bg-green-50 border border-green-200 p-2.5 rounded-xl font-bold text-green-800 outline-none">
-                        <option value="2569">2569</option><option value="2570">2570</option>
-                    </select>
+                    <select id="mainYear" onchange="loadData()" class="bg-green-50 border border-green-200 p-2.5 rounded-xl font-bold text-green-800 outline-none"><option>2569</option><option>2570</option></select>
                 </div>
                 <div class="flex flex-col">
                     <label class="text-xs text-slate-400 font-bold mb-1">ภาคเรียน</label>
-                    <select id="mainTerm" onchange="loadData()" class="bg-green-50 border border-green-200 p-2.5 rounded-xl font-bold text-green-800 outline-none">
-                        <option value="1">1</option><option value="2">2</option>
-                    </select>
+                    <select id="mainTerm" onchange="loadData()" class="bg-green-50 border border-green-200 p-2.5 rounded-xl font-bold text-green-800 outline-none"><option>1</option><option>2</option></select>
                 </div>
                 <div class="flex flex-col">
                     <label class="text-xs text-slate-400 font-bold mb-1">ระดับชั้น</label>
-                    <select id="gradeSelect" onchange="loadData()" class="bg-green-50 border border-green-200 p-2.5 rounded-xl font-bold text-green-800 outline-none">
+                    <select id="gradeSelect" onchange="loadData()" class="bg-green-50 border border-green-200 p-2.5 rounded-xl font-bold text-green-800">
                         <option value="P3">ป.3</option><option value="P4">ป.4</option><option value="P5" selected>ป.5</option><option value="P6">ป.6</option>
                     </select>
                 </div>
@@ -77,7 +72,7 @@
             </div>
         </div>
 
-        <div id="termDateDisplay" class="mb-4 px-6 py-2 bg-blue-50 text-blue-700 rounded-2xl border border-blue-100 text-xs font-bold italic">
+        <div id="termDateDisplay" class="mb-4 px-6 py-2 bg-blue-50 text-blue-700 rounded-2xl border border-blue-100 text-xs font-bold italic flex items-center gap-2">
             <i class="fas fa-info-circle mr-2"></i><span id="termInfoText">ตรวจสอบข้อมูลภาคเรียน...</span>
         </div>
 
@@ -91,9 +86,7 @@
                 <tbody id="studentTableBody" class="divide-y divide-slate-100"></tbody>
             </table>
             <div class="p-6 bg-slate-50 border-t flex justify-center">
-                <button onclick="deleteAllStudents()" class="bg-red-500 hover:bg-red-700 text-white px-8 py-3 rounded-2xl font-bold shadow-lg flex items-center gap-2">
-                    <i class="fas fa-trash-alt"></i> ลบรายชื่อนักเรียนทั้งหมดในห้องนี้
-                </button>
+                <button onclick="deleteAllStudents()" class="bg-red-500 hover:bg-red-700 text-white px-8 py-3 rounded-2xl font-bold shadow-lg flex items-center gap-2"><i class="fas fa-trash-alt"></i> ลบรายชื่อนักเรียนทั้งหมดในห้องนี้</button>
             </div>
         </div>
     </main>
@@ -102,9 +95,9 @@
         <div class="bg-white rounded-3xl shadow-lg p-8 border border-green-100">
             <h2 class="text-2xl font-bold text-green-800 mb-6 flex items-center gap-2"><i class="fas fa-file-invoice text-yellow-500"></i> รายงานเช็คเวลาเรียนรายเดือน</h2>
             <div class="grid grid-cols-1 md:flex flex-wrap gap-4 bg-slate-50 p-6 rounded-2xl border mb-8 items-end border-slate-200 shadow-inner">
-                <div class="flex-1 min-w-[120px]"><label class="text-xs font-bold mb-2 block text-slate-500">ปีการศึกษา</label><select id="repYear" class="w-full border p-3 rounded-xl"><option value="2569">2569</option><option value="2570">2570</option></select></div>
-                <div class="flex-1 min-w-[100px]"><label class="text-xs font-bold mb-2 block text-slate-500">ภาคเรียน</label><select id="repTerm" class="w-full border p-3 rounded-xl"><option value="1">1</option><option value="2">2</option></select></div>
-                <div class="flex-1 min-w-[180px]"><label class="text-xs font-bold mb-2 block text-slate-500">เดือน/ปี</label><input type="month" id="reportMonth" class="w-full border p-3 rounded-xl"></div>
+                <div class="flex-1 min-w-[120px]"><label class="text-xs font-bold mb-2 block text-slate-500">ปีการศึกษา</label><select id="repYear" class="w-full border p-3 rounded-xl"><option>2569</option><option>2570</option></select></div>
+                <div class="flex-1 min-w-[100px]"><label class="text-xs font-bold mb-2 block text-slate-500">ภาคเรียน</label><select id="repTerm" class="w-full border p-3 rounded-xl"><option>1</option><option>2</option></select></div>
+                <div class="flex-1 min-w-[180px]"><label class="text-xs font-bold mb-2 block text-slate-500">เลือกเดือน/ปี</label><input type="month" id="reportMonth" class="w-full border p-3 rounded-xl"></div>
                 <div class="flex-1 min-w-[120px]"><label class="text-xs font-bold mb-2 block text-slate-500">ชั้นเรียน</label><select id="reportGrade" class="w-full border p-3 rounded-xl"><option value="P3">ป.3</option><option value="P4">ป.4</option><option value="P5" selected>ป.5</option><option value="P6">ป.6</option></select></div>
                 <div class="flex gap-2"><button onclick="generateReport()" class="bg-purple-600 text-white p-3 rounded-xl font-bold px-8 shadow-md">ค้นหา</button><button onclick="window.print()" id="btnPrint" class="hidden bg-rose-600 text-white p-3 rounded-xl font-bold px-8 shadow-md">พิมพ์ PDF</button></div>
             </div>
@@ -112,19 +105,19 @@
         </div>
     </main>
 
-    <main id="view-summary" class="container mx-auto p-4 flex-1 no-print hidden">
+    <main id="view-summary" class="container mx-auto p-4 md:p-6 flex-1 no-print hidden">
         <div class="bg-white rounded-3xl shadow-xl p-8 border-t-8 border-green-600">
             <h2 class="text-2xl font-bold text-green-800 mb-6 text-center underline">สรุปสถิติการมาเรียนรายภาคเรียน</h2>
             <div class="grid grid-cols-1 md:flex gap-4 bg-green-50 p-6 rounded-2xl mb-8 items-end border border-green-100 shadow-inner">
-                <div class="flex-1"><label class="block text-xs font-bold mb-1">ปีการศึกษา</label><select id="sumYear" class="w-full border p-2.5 rounded-xl"><option value="2569">2569</option><option value="2570">2570</option></select></div>
-                <div class="flex-1"><label class="block text-xs font-bold mb-1">ภาคเรียน</label><select id="sumTerm" class="w-full border p-2.5 rounded-xl"><option value="1">1</option><option value="2">2</option></select></div>
-                <div class="flex-1"><label class="block text-xs font-bold mb-1">ระดับชั้น</label><select id="sumGrade" class="w-full border p-2.5 rounded-xl"><option value="P3">ป.3</option><option value="P4">ป.4</option><option value="P5" selected>ป.5</option><option value="P6">ป.6</option></select></div>
+                <div class="flex-1"><label class="block text-xs font-bold mb-1 text-slate-500">ปีการศึกษา</label><select id="sumYear" class="w-full border p-2.5 rounded-xl"><option>2569</option><option>2570</option></select></div>
+                <div class="flex-1"><label class="block text-xs font-bold mb-1 text-slate-500">ภาคเรียน</label><select id="sumTerm" class="w-full border p-2.5 rounded-xl"><option>1</option><option>2</option></select></div>
+                <div class="flex-1"><label class="block text-xs font-bold mb-1 text-slate-500">ระดับชั้น</label><select id="sumGrade" class="w-full border p-2.5 rounded-xl"><option value="P3">ป.3</option><option value="P4">ป.4</option><option value="P5" selected>ป.5</option><option value="P6">ป.6</option></select></div>
                 <button onclick="loadSummary()" class="flex-1 bg-green-700 text-white p-2.5 rounded-xl font-bold px-8 shadow-md">ดึงข้อมูลสรุป</button>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full border-collapse border border-slate-200">
                     <thead class="bg-green-800 text-white">
-                        <tr><th class="p-3 border">ที่</th><th class="p-3 border text-left">ชื่อ-นามสกุล</th><th class="p-3 border">มา</th><th class="p-3 border text-amber-200">สาย</th><th class="p-3 border text-blue-200">ลา</th><th class="p-3 border text-red-200">ขาด</th><th class="p-3 border bg-yellow-400 text-green-900 font-bold">%</th></tr>
+                        <tr><th class="p-3 border">ที่</th><th class="p-3 border text-left">ชื่อ-นามสกุล</th><th class="p-3 border">มา (วัน)</th><th class="p-3 border text-amber-200">สาย</th><th class="p-3 border text-blue-200">ลา</th><th class="p-3 border text-red-200">ขาด</th><th class="p-3 border bg-yellow-400 text-green-900 font-bold">%</th></tr>
                     </thead>
                     <tbody id="summaryTableBody" class="divide-y font-bold text-center bg-white"></tbody>
                 </table>
@@ -173,7 +166,12 @@
             if(view === 'summary') loadSummary();
         };
 
-        const getBaseRef = () => `school/${document.getElementById('gradeSelect').value}/${document.getElementById('mainYear').value}/${document.getElementById('mainTerm').value}`;
+        const getBaseRef = (y, t, g) => {
+            const year = y || document.getElementById('mainYear').value;
+            const term = t || document.getElementById('mainTerm').value;
+            const grade = g || document.getElementById('gradeSelect').value;
+            return `school/${grade}/${year}/${term}`;
+        };
 
         window.loadData = () => {
             onValue(ref(db, getBaseRef()), (snap) => {
@@ -183,41 +181,23 @@
                 const termDates = data.termDates || {};
                 const holidays = data.holidays || {};
                 
-                const selectedDateStr = dateInput.value;
-                const d = new Date(selectedDateStr);
+                const d = new Date(dateInput.value);
                 const isWeekend = (d.getDay() === 0 || d.getDay() === 6);
-                
-                // ตรวจสอบเงื่อนไขเปิดเทอมและการทำงาน
-                let isTermActive = true;
-                if(termDates.start && termDates.end) {
-                    const start = new Date(termDates.start);
-                    const end = new Date(termDates.end);
-                    isTermActive = (d >= start && d <= end);
-                } else { isTermActive = false; }
+                let isTermActive = termDates.start ? (d >= new Date(termDates.start) && d <= new Date(termDates.end)) : false;
 
-                document.getElementById('termInfoText').innerText = termDates.start ? `📍 ภาคเรียนปัจจุบัน: ${termDates.start} ถึง ${termDates.end}` : "⚠️ ยังไม่ได้กำหนดเปิด-ปิดเทอม (กรุณากำหนดข้อมูลก่อนเช็คชื่อ)";
+                document.getElementById('termInfoText').innerText = termDates.start ? `📌 ภาคเรียนปัจจุบัน: ${termDates.start} ถึง ${termDates.end}` : "⚠️ ยังไม่ได้กำหนดเปิด-ปิดเทอม";
                 
-                const holidayReason = holidays[selectedDateStr];
-                const btnH = document.getElementById('btnHoliday');
                 const labelH = document.getElementById('holidayLabel');
                 const area = document.getElementById('checkinArea');
 
-                if(holidayReason) {
-                    btnH.innerText = 'ยกเลิกวันหยุด'; btnH.classList.replace('bg-orange-500', 'bg-red-600');
-                    labelH.innerText = `[ วันหยุด ] : ${holidayReason}`; labelH.classList.remove('hidden');
-                } else {
-                    btnH.innerText = 'กำหนดวันหยุด'; btnH.classList.replace('bg-red-600', 'bg-orange-500');
-                    labelH.classList.add('hidden');
-                }
-
-                // ล็อกหน้าเช็คชื่อหากไม่อยู่ในเงื่อนไข
-                if(!isTermActive || isWeekend) {
-                    area.classList.add('btn-locked');
-                    labelH.innerText = isWeekend ? "⚠️ วันเสาร์-อาทิตย์ ไม่สามารถเช็คชื่อได้" : "⚠️ วันที่อยู่นอกช่วงภาคเรียน ไม่สามารถเช็คชื่อได้";
+                if(holidays[dateInput.value]) {
+                    labelH.innerText = `[ วันหยุด ] : ${holidays[dateInput.value]}`; labelH.classList.remove('hidden');
+                } else if(isWeekend || !isTermActive) {
+                    labelH.innerText = isWeekend ? "⚠️ วันเสาร์-อาทิตย์ ไม่สามารถเช็คชื่อได้" : "⚠️ อยู่นอกช่วงภาคเรียน ไม่สามารถเช็คชื่อได้";
                     labelH.classList.remove('hidden');
-                } else { area.classList.remove('btn-locked'); }
+                    area.classList.add('btn-locked');
+                } else { labelH.classList.add('hidden'); area.classList.remove('btn-locked'); }
 
-                // อัปเดตสถานะปุ่มมาทุกคน
                 const btnA = document.getElementById('btnAll');
                 const presentCount = Object.values(attendance).filter(v => v === 'มา').length;
                 btnA.innerHTML = (presentCount > 0 && presentCount === Object.keys(students).length) ? 'ยกเลิกทุกคน' : 'มาทุกคน';
@@ -241,48 +221,20 @@
             });
         };
 
-        // ฟังก์ชัน Toggle มาทุกคน/ยกเลิก
         window.toggleAllPresent = async () => {
             const btn = document.getElementById('btnAll');
             const isCancel = btn.innerText.includes("ยกเลิก");
             onValue(ref(db, `${getBaseRef()}/students`), async (snap) => {
                 const students = snap.val() || {};
                 const updates = {};
-                Object.keys(students).forEach(no => {
-                    updates[`${getBaseRef()}/attendance/${dateInput.value}/${no}`] = isCancel ? null : 'มา';
-                });
+                Object.keys(students).forEach(no => updates[`${getBaseRef()}/attendance/${dateInput.value}/${no}`] = isCancel ? null : 'มา');
                 await update(ref(db), updates);
             }, { onlyOnce: true });
         };
 
-        // ฟังก์ชันอื่นคงเดิมทั้งหมด
-        window.processImport = async () => {
-            const raw = document.getElementById('importArea').value.trim();
-            if(!raw) return;
-            const updates = {};
-            raw.split('\n').forEach(line => {
-                const p = line.trim().split(/\s+/);
-                if (p.length >= 2) updates[`${getBaseRef()}/students/${p[0]}`] = { name: p.slice(1, p.length > 2 ? -1 : undefined).join(' '), nickname: p.length > 2 ? p[p.length - 1] : '' };
-            });
-            await update(ref(db), updates);
-            document.getElementById('modalImport').classList.add('hidden');
-        };
-
-        window.saveSingleStudent = async () => {
-            const no = document.getElementById('mNo').value;
-            const name = document.getElementById('mName').value;
-            const nick = document.getElementById('mNick').value;
-            if(no && name) {
-                await set(ref(db, `${getBaseRef()}/students/${no}`), { name, nickname: nick });
-                document.getElementById('modalAdd').classList.add('hidden');
-            }
-        };
-
         window.updateStatus = async (no, status) => {
             const currentRef = ref(db, `${getBaseRef()}/attendance/${dateInput.value}/${no}`);
-            onValue(currentRef, async (snap) => {
-                await set(currentRef, snap.val() === status ? null : status);
-            }, { onlyOnce: true });
+            onValue(currentRef, async (snap) => { await set(currentRef, snap.val() === status ? null : status); }, { onlyOnce: true });
         };
 
         window.setTermDates = async () => {
@@ -294,49 +246,12 @@
         window.toggleHoliday = async () => {
             const path = `${getBaseRef()}/holidays/${dateInput.value}`;
             onValue(ref(db, path), async (snap) => {
-                if(!snap.val()) {
-                    const reason = prompt("วันหยุดเนื่องจาก:");
-                    if(reason) await set(ref(db, path), reason);
-                } else { if(confirm("ยกเลิกวันหยุด?")) await remove(ref(db, path)); }
+                if(!snap.val()) { const reason = prompt("วันหยุดเนื่องจาก:"); if(reason) await set(ref(db, path), reason); }
+                else if(confirm("ยกเลิกวันหยุด?")) await remove(ref(db, path));
             }, { onlyOnce: true });
         };
 
-        window.generateReport = () => {
-            const y = document.getElementById('repYear').value;
-            const t = document.getElementById('repTerm').value;
-            const g = document.getElementById('reportGrade').value;
-            const [year, month] = document.getElementById('reportMonth').value.split('-');
-            const daysInMonth = new Date(year, month, 0).getDate();
-            const monthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
-            onValue(ref(db, `school/${g}/${y}/${t}`), (snap) => {
-                const data = snap.val() || {};
-                const students = data.students || {};
-                const attendance = data.attendance || {};
-                const holidays = data.holidays || {};
-                let rows = '';
-                Object.keys(students).sort((a,b)=>a-b).forEach((no, idx) => {
-                    let dCells = ''; let s = { มา: 0, สาย: 0, ลา: 0, ขาด: 0 };
-                    for(let d=1; d<=31; d++) {
-                        const dStr = `${year}-${month}-${String(d).padStart(2,'0')}`;
-                        const dayOfWeek = new Date(year, month-1, d).getDay();
-                        if(d <= daysInMonth) {
-                            if(dayOfWeek === 0 || dayOfWeek === 6 || holidays[dStr]) dCells += `<td class="holiday-cell"></td>`;
-                            else {
-                                const st = (attendance[dStr] && attendance[dStr][no]) || '';
-                                let m = ''; if(st==='มา'){ m='/'; s.มา++; } else if(st==='ลา'){ m='ล'; s.ลา++; } else if(st==='ขาด'){ m='ข'; s.ขาด++; } else if(st==='สาย'){ m='ส'; s.สาย++; }
-                                dCells += `<td>${m}</td>`;
-                            }
-                        } else { dCells += `<td class="holiday-cell"></td>`; }
-                    }
-                    rows += `<tr><td>${idx+1}</td><td class="name-col font-bold">${students[no].name}</td>${dCells}<td>${s.มา}</td><td>${s.ลา}</td><td>${s.ขาด}</td><td>${((s.มา/daysInMonth)*100).toFixed(0)}%</td></tr>`;
-                });
-                const html = `<div style="text-align:center;"><h2 style="font-size:16px; font-weight:bold; margin-bottom:10px;">แบบบันทึกการมาเรียน เดือน ${monthNames[month-1]} พ.ศ. ${parseInt(year)+543}</h2><table class="report-table"><thead><tr><th rowspan="2" class="no-col">ที่</th><th rowspan="2" class="name-col">ชื่อ-สกุล</th><th colspan="31">วันที่</th><th colspan="3" style="width:70px;">สรุป</th><th rowspan="2" class="percent-col">%</th></tr><tr>${Array.from({length:31}, (_, i) => `<th class="day-col">${i+1}</th>`).join('')}<th class="stat-col">มา</th><th class="stat-col">ลา</th><th class="stat-col">ขาด</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-                document.getElementById('reportPreview').innerHTML = html;
-                document.getElementById('printArea').innerHTML = html;
-                document.getElementById('btnPrint').classList.remove('hidden');
-            });
-        };
-
+        // ระบบสรุปรายภาคเรียน (ดึงข้อมูลอัตโนมัติจากบันทึกรายวัน)
         window.loadSummary = () => {
             const y = document.getElementById('sumYear').value;
             const t = document.getElementById('sumTerm').value;
@@ -347,25 +262,74 @@
                 const students = data.students || {};
                 const attendance = data.attendance || {};
                 const holidays = data.holidays || {};
-                if(!termDates.start) return alert("กรุณากำหนดเปิด-ปิดเทอมก่อน");
-                let totalDays = 0;
+                if(!termDates.start) return alert("กรุณากำหนดเปิด-ปิดเทอมในหน้าเช็คชื่อก่อนครับ");
+                
+                let totalSchoolDays = 0;
                 const start = new Date(termDates.start); const end = new Date(termDates.end);
-                for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)) {
+                for(let d = new Date(start); d <= end; d.setDate(d.getDate()+1)) {
                     const dStr = d.toISOString().split('T')[0];
-                    if(d.getDay()!==0 && d.getDay()!==6 && !holidays[dateStr]) totalDays++;
+                    if(d.getDay()!==0 && d.getDay()!==6 && !holidays[dStr]) totalSchoolDays++;
                 }
+
                 const tbody = document.getElementById('summaryTableBody');
                 tbody.innerHTML = '';
                 Object.keys(students).sort((a,b)=>a-b).forEach(no => {
-                    let s = { มา: 0, ลา: 0, สาย: 0, ขาด: 0 };
+                    let s = { มา: 0, ลา: 0, ขาด: 0, สาย: 0 };
                     Object.keys(attendance).forEach(date => {
-                        const st = attendance[date][no];
-                        if(st) s[st]++;
+                        if(new Date(date) >= start && new Date(date) <= end) {
+                            const st = attendance[date][no];
+                            if(st) s[st]++;
+                        }
                     });
-                    const per = totalDays > 0 ? ((s.มา/totalDays)*100).toFixed(1) : '0';
+                    const per = totalSchoolDays > 0 ? ((s.มา/totalSchoolDays)*100).toFixed(1) : '0';
                     tbody.innerHTML += `<tr><td class="p-3 border">${no}</td><td class="p-3 border text-left font-bold">${students[no].name}</td><td class="p-3 border">${s.มา}</td><td class="p-3 border text-amber-600">${s.สาย}</td><td class="p-3 border text-blue-600">${s.ลา}</td><td class="p-3 border text-red-600">${s.ขาด}</td><td class="p-3 border bg-yellow-50 text-green-900">${per}%</td></tr>`;
                 });
             });
+        };
+
+        window.generateReport = () => {
+            const y = document.getElementById('repYear').value, t = document.getElementById('repTerm').value, g = document.getElementById('reportGrade').value;
+            const [year, month] = document.getElementById('reportMonth').value.split('-');
+            const monthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+            onValue(ref(db, `school/${g}/${y}/${t}`), (snap) => {
+                const data = snap.val() || {}, students = data.students || {}, attendance = data.attendance || {}, holidays = data.holidays || {};
+                let rows = '';
+                Object.keys(students).sort((a,b)=>a-b).forEach((no, idx) => {
+                    let dCells = ''; let s = { มา: 0, สาย: 0, ลา: 0, ขาด: 0 };
+                    for(let d=1; d<=31; d++) {
+                        const dStr = `${year}-${month}-${String(d).padStart(2,'0')}`;
+                        const dayOfWeek = new Date(year, month-1, d).getDay();
+                        if(dayOfWeek === 0 || dayOfWeek === 6 || holidays[dStr]) dCells += `<td class="holiday-cell"></td>`;
+                        else {
+                            const st = (attendance[dStr] && attendance[dStr][no]) || '';
+                            let mark = ''; if(st==='มา'){ m='/'; s.มา++; } else if(st==='ลา'){ m='ล'; s.ลา++; } else if(st==='ขาด'){ m='ข'; s.ขาด++; } else if(st==='สาย'){ m='ส'; s.สาย++; }
+                            dCells += `<td>${mark}</td>`;
+                        }
+                    }
+                    rows += `<tr><td>${idx+1}</td><td class="name-col font-bold">${students[no].name}</td>${dCells}<td>${s.มา}</td><td>${s.ลา}</td><td>${s.ขาด}</td><td>${((s.มา/30)*100).toFixed(0)}%</td></tr>`;
+                });
+                const html = `<div style="text-align:center;"><h2 style="font-size:16px; font-weight:bold; margin-bottom:10px;">แบบบันทึกการมาเรียน เดือน ${monthNames[month-1]} พ.ศ. ${parseInt(year)+543}</h2><table class="report-table"><thead><tr><th rowspan="2" class="no-col">ที่</th><th rowspan="2" class="name-col">ชื่อ-สกุล</th><th colspan="31">วันที่</th><th colspan="3" style="width:70px;">สรุป</th><th rowspan="2" class="percent-col">%</th></tr><tr>${Array.from({length:31}, (_, i) => `<th class="day-col">${i+1}</th>`).join('')}<th class="stat-col">มา</th><th class="stat-col">ลา</th><th class="stat-col">ขาด</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+                document.getElementById('reportPreview').innerHTML = html;
+                document.getElementById('printArea').innerHTML = html;
+                document.getElementById('btnPrint').classList.remove('hidden');
+            });
+        };
+
+        window.processImport = async () => {
+            const raw = document.getElementById('importArea').value.trim();
+            if(!raw) return;
+            const updates = {}; const path = getBaseRef();
+            raw.split('\n').forEach(line => {
+                const p = line.trim().split(/\s+/);
+                if (p.length >= 2) updates[`${path}/students/${p[0]}`] = { name: p.slice(1, p.length > 2 ? -1 : undefined).join(' '), nickname: p.length > 2 ? p[p.length - 1] : '' };
+            });
+            await update(ref(db), updates);
+            document.getElementById('modalImport').classList.add('hidden');
+        };
+
+        window.saveSingleStudent = async () => {
+            const no = document.getElementById('mNo').value, name = document.getElementById('mName').value, nick = document.getElementById('mNick').value;
+            if(no && name) { await set(ref(db, `${getBaseRef()}/students/${no}`), { name, nickname: nick }); document.getElementById('modalAdd').classList.add('hidden'); }
         };
 
         window.removeStudent = (no) => { if(confirm('ลบ?')) remove(ref(db, `${getBaseRef()}/students/${no}`)); };
