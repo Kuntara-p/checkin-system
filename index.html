@@ -13,20 +13,20 @@
 </head>
 <body class="min-h-screen flex flex-col">
     <header class="bg-indigo-900 text-white p-5 shadow-lg flex justify-between items-center">
-        <h1 class="text-xl font-bold"><i class="fas fa-flask mr-2 text-cyan-400"></i>ระบบเช็คชื่อนักเรียน ป.5</h1>
+        <h1 class="text-xl font-bold"><i class="fas fa-microscope mr-2 text-cyan-400"></i>ระบบเช็คชื่อวิทยาศาสตร์</h1>
         <button onclick="document.getElementById('modal').classList.remove('hidden')" class="bg-cyan-500 hover:bg-cyan-400 px-6 py-2 rounded-xl font-bold shadow-md transition-all">
             <i class="fas fa-plus-circle mr-1"></i> เพิ่มนักเรียน
         </button>
     </header>
 
     <main class="p-6 flex-1 max-w-4xl mx-auto w-full">
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border">
             <table class="w-full text-left">
                 <thead class="bg-slate-50 border-b">
                     <tr>
-                        <th class="p-4 w-20 text-center font-bold text-slate-600">เลขที่</th>
-                        <th class="p-4 font-bold text-slate-600">ชื่อ-นามสกุล</th>
-                        <th class="p-4 w-24 text-center font-bold text-slate-600">จัดการ</th>
+                        <th class="p-4 w-20 text-center font-bold">เลขที่</th>
+                        <th class="p-4 font-bold">ชื่อ-นามสกุล</th>
+                        <th class="p-4 w-24 text-center font-bold">จัดการ</th>
                     </tr>
                 </thead>
                 <tbody id="studentList">
@@ -36,13 +36,13 @@
     </main>
 
     <div id="modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
-        <div class="bg-white p-8 rounded-2xl w-full max-w-sm shadow-2xl">
-            <h3 class="text-xl font-bold mb-6 text-indigo-900 border-b pb-2">บันทึกนักเรียนใหม่</h3>
-            <input type="number" id="stdNo" placeholder="เลขที่" class="w-full border-2 p-3 rounded-xl mb-4 outline-none focus:border-indigo-500 transition-all">
-            <input type="text" id="stdName" placeholder="ชื่อ-นามสกุล" class="w-full border-2 p-3 rounded-xl mb-6 outline-none focus:border-indigo-500 transition-all">
+        <div class="bg-white p-8 rounded-2xl w-full max-w-sm shadow-2xl text-slate-800">
+            <h3 class="text-xl font-bold mb-6 text-indigo-900">บันทึกนักเรียนใหม่</h3>
+            <input type="number" id="stdNo" placeholder="เลขที่" class="w-full border-2 p-3 rounded-xl mb-4 outline-none focus:border-indigo-500">
+            <input type="text" id="stdName" placeholder="ชื่อ-นามสกุล" class="w-full border-2 p-3 rounded-xl mb-6 outline-none focus:border-indigo-500">
             <div class="flex gap-3">
-                <button id="saveBtn" class="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-lg">บันทึก</button>
-                <button onclick="document.getElementById('modal').classList.add('hidden')" class="flex-1 bg-slate-100 py-3 rounded-xl font-bold text-slate-500 hover:bg-slate-200">ปิด</button>
+                <button id="saveBtn" class="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700">บันทึก</button>
+                <button onclick="document.getElementById('modal').classList.add('hidden')" class="flex-1 bg-slate-100 py-3 rounded-xl font-bold">ปิด</button>
             </div>
         </div>
     </div>
@@ -51,45 +51,43 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // รหัส Firebase ของคุณครู (ตรวจสอบจากภาพ image_4 และ image_17 แล้ว)
         const firebaseConfig = {
             apiKey: "AIzaSyCaAWoyfgWqBx8OiJLKuIOMmy602Y3cb9Q",
             authDomain: "mycheckin-ba316.firebaseapp.com",
             databaseURL: "https://mycheckin-ba316-default-rtdb.asia-southeast1.firebasedatabase.app",
             projectId: "mycheckin-ba316",
             storageBucket: "mycheckin-ba316.firebasestorage.app",
-            messagingSenderId: "70860501032",
             appId: "1:70860501032:web:6cf057afbdd8330048451d"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // ฟังก์ชันบันทึก
+        // ฟังก์ชันบันทึก (แก้ปัญหา Path Invalid)
         document.getElementById('saveBtn').onclick = async () => {
             const no = document.getElementById('stdNo').value;
             const name = document.getElementById('stdName').value;
-            if(!no || !name) return alert("กรุณากรอกเลขที่และชื่อด้วยครับ");
+            if(!no || !name) return alert("กรุณากรอกข้อมูลให้ครบครับ");
 
             try {
-                // บันทึกไปที่โฟลเดอร์ students
-                await set(ref(db, 'students/' + no), { name: name });
+                // บันทึกลง Path 'students/P5/...' (ไม่ใช้จุดเพื่อกัน Error)
+                await set(ref(db, 'students/P5/' + no), { name: name });
                 alert("บันทึกสำเร็จแล้วครับ!");
                 document.getElementById('stdNo').value = '';
                 document.getElementById('stdName').value = '';
                 document.getElementById('modal').classList.add('hidden');
             } catch (e) {
-                alert("บันทึกไม่ได้! รบกวนคุณครูเช็คหน้า Rules ใน Firebase ให้เป็นสีส้มก่อนนะครับ: " + e.message);
+                alert("บันทึกไม่ได้! สาเหตุ: " + e.message);
             }
         };
 
-        // ฟังก์ชันลบ
+        // ลบข้อมูล
         window.del = (no) => {
-            if(confirm("ต้องการลบเลขที่ " + no + " ใช่หรือไม่?")) remove(ref(db, 'students/' + no));
+            if(confirm("ลบเลขที่ " + no + "?")) remove(ref(db, 'students/P5/' + no));
         };
 
-        // ดึงข้อมูลมาแสดงแบบ Real-time
-        onValue(ref(db, 'students'), (snap) => {
+        // แสดงผล
+        onValue(ref(db, 'students/P5'), (snap) => {
             const data = snap.val();
             const list = document.getElementById('studentList');
             list.innerHTML = "";
@@ -104,7 +102,7 @@
                     </tr>`;
                 });
             } else {
-                list.innerHTML = '<tr><td colspan="3" class="p-10 text-center text-slate-400 italic font-light">ยังไม่มีรายชื่อนักเรียน</td></tr>';
+                list.innerHTML = '<tr><td colspan="3" class="p-10 text-center text-slate-400 italic">ยังไม่มีรายชื่อนักเรียน</td></tr>';
             }
         });
     </script>
