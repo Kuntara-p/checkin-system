@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCIENCE SMART SYSTEM - BAN KHUAN NIANG SCHOOL V24</title>
+    <title>SCIENCE SMART SYSTEM - BAN KHUAN NIANG SCHOOL V25</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Sarabun', sans-serif; background-color: #f0fdf4; }
-        
-        /* สไตล์ตารางรายงานตามภาพต้นฉบับ 100% */
         .report-table { border-collapse: collapse; width: 100%; table-layout: fixed; font-size: 9px; border: 1px solid black; background: white; }
         .report-table th, .report-table td { border: 1px solid black; padding: 2px 0; text-align: center; height: 18px; color: black; }
         .day-col { width: 20px !important; }
@@ -18,17 +16,13 @@
         .name-col { width: 170px !important; text-align: left !important; padding-left: 5px !important; }
         .stat-col { width: 25px !important; }
         .percent-col { width: 35px !important; }
-
-        /* สีเทาทึบสำหรับวันหยุด/ส.อา. */
         .holiday-cell { background-color: #94a3b8 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-
         @media print {
             .no-print { display: none !important; }
             body { background: white; padding: 0; margin: 0; }
             .print-area { display: block !important; width: 297mm; padding: 10mm; }
             @page { size: A4 landscape; margin: 5mm; }
         }
-        
         .nav-tab.active { background-color: white; color: #15803d; border-radius: 8px 8px 0 0; font-weight: bold; border-top: 4px solid #15803d; }
         .btn-locked { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
     </style>
@@ -129,10 +123,10 @@
     </main>
 
     <div id="modalAdd" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50 no-print">
-        <div class="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl"><h3 class="text-2xl font-bold mb-6 text-green-900 border-b pb-2">เพิ่มนักเรียนใหม่</h3><div class="space-y-4 text-slate-800"><input type="number" id="mNo" placeholder="เลขที่" class="w-full border p-3 rounded-xl"><input type="text" id="mName" placeholder="ชื่อ-นามสกุล" class="w-full border p-3 rounded-xl"><input type="text" id="mNick" placeholder="ชื่อเล่น" class="w-full border p-3 rounded-xl"><div class="flex gap-2 pt-2"><button onclick="saveSingleStudent()" class="flex-1 bg-green-600 text-white py-3 rounded-xl font-bold">บันทึก</button><button onclick="document.getElementById('modalAdd').classList.add('hidden')" class="flex-1 bg-slate-100 py-3 rounded-xl">ปิด</button></div></div></div>
+        <div class="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl"><h3 class="text-2xl font-bold mb-6 text-green-900 border-b pb-2">เพิ่มนักเรียนใหม่</h3><div class="space-y-4 text-slate-800"><input type="number" id="mNo" placeholder="เลขที่" class="w-full border p-3 rounded-xl"><input type="text" id="mName" placeholder="ชื่อ-นามสกุล" class="w-full border p-3 rounded-xl"><input type="text" id="mNick" placeholder="ชื่อเล่น" class="w-full border p-3 rounded-xl"><div class="flex gap-2 pt-2"><button onclick="saveSingleStudent()" class="flex-1 bg-green-600 text-white py-3 rounded-xl font-bold">บันทึก</button><button onclick="document.getElementById('modalAdd').classList.add('hidden')" class="flex-1 bg-slate-100 py-3 rounded-xl font-bold">ปิด</button></div></div></div>
     </div>
     <div id="modalImport" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50 no-print">
-        <div class="bg-white rounded-3xl p-8 w-full max-w-2xl shadow-2xl"><h3 class="text-2xl font-bold mb-4 text-green-900 border-b pb-2">นำเข้า Excel</h3><textarea id="importArea" rows="10" class="w-full border p-4 rounded-xl font-mono text-sm mb-4" placeholder="เลขที่ ชื่อจริง ชื่อเล่น"></textarea><div class="flex gap-2"><button onclick="processImport()" class="flex-1 bg-amber-500 text-white py-3 rounded-xl font-bold">บันทึกทั้งหมด</button><button onclick="document.getElementById('modalImport').classList.add('hidden')" class="flex-1 bg-slate-100 py-3 rounded-xl">ปิด</button></div></div>
+        <div class="bg-white rounded-3xl p-8 w-full max-w-2xl shadow-2xl"><h3 class="text-2xl font-bold mb-4 text-green-900 border-b pb-2">นำเข้า Excel</h3><textarea id="importArea" rows="10" class="w-full border p-4 rounded-xl font-mono text-sm mb-4" placeholder="เลขที่ ชื่อจริง ชื่อเล่น"></textarea><div class="flex gap-2"><button onclick="processImport()" class="flex-1 bg-amber-500 text-white py-3 rounded-xl font-bold">บันทึกทั้งหมด</button><button onclick="document.getElementById('modalImport').classList.add('hidden')" class="flex-1 bg-slate-100 py-3 rounded-xl font-bold">ปิด</button></div></div>
     </div>
 
     <div id="printArea" class="hidden print-area"></div>
@@ -253,74 +247,66 @@
             }, { onlyOnce: true });
         };
 
-        // --- ระบบรายงานรายเดือน ยืดหยุ่นตามจำนวนวันและหักวันหยุดพิเศษออกจากเปอร์เซ็นต์ ---
+        // แก้ไขฟังก์ชันดึงรายงานรายเดือนให้นับวันทำงานได้แม่นยำ (Loop logic fixed)
         window.generateReport = () => {
             const y = document.getElementById('repYear').value, t = document.getElementById('repTerm').value, g = document.getElementById('reportGrade').value;
             const [year, month] = document.getElementById('reportMonth').value.split('-');
-            const daysInMonth = new Date(year, month, 0).getDate(); // หาว่าเดือนนั้นมีกี่วัน (30 หรือ 31)
+            const daysInMonth = new Date(year, month, 0).getDate();
             const monthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
             
             onValue(ref(db, `school/${g}/${y}/${t}`), (snap) => {
                 const data = snap.val() || {}, students = data.students || {}, attendance = data.attendance || {}, holidays = data.holidays || {}, termDates = data.termDates || {};
                 let rows = ''; 
                 
-                // หาจำนวนวันเปิดเรียนจริงในเดือนนั้นเพื่อคำนวณ % (หัก ส-อา และวันหยุดพิเศษที่คุณครูกดเอง)
-                let schoolDaysInMonth = 0;
+                let activeDays = 0;
                 const startT = new Date(termDates.start); const endT = new Date(termDates.end);
+                
+                // ตรวจสอบวันทำงานจริงในเดือนนั้น (ใช้ <= เพื่อให้รวมวันสุดท้าย)
                 for(let d=1; d<=daysInMonth; d++) {
                     const dt = new Date(year, month-1, d);
                     const ds = `${year}-${month}-${String(d).padStart(2,'0')}`;
-                    // วันเปิดเรียนจริง = ไม่ใช่ ส-อา AND ไม่ใช่วันหยุดพิเศษ AND อยู่ในช่วงเทอม
-                    if(dt.getDay()!==0 && dt.getDay()!==6 && !holidays[ds] && dt>=startT && dt<=endT) schoolDaysInMonth++;
+                    if(dt.getDay()!==0 && dt.getDay()!==6 && !holidays[ds] && dt>=startT && dt<=endT) activeDays++;
                 }
 
                 Object.keys(students).sort((a,b)=>a-b).forEach((no, idx) => {
                     let dCells = ''; let s = { มา: 0, สาย: 0, ลา: 0, ขาด: 0 };
-                    for(let d=1; d<=daysInMonth; d++) {
+                    for(let d=1; d<=31; d++) {
                         const dStr = `${year}-${month}-${String(d).padStart(2,'0')}`;
                         const dayOfWeek = new Date(year, month-1, d).getDay();
-                        if(dayOfWeek === 0 || dayOfWeek === 6 || holidays[dStr]) {
-                            dCells += `<td class="holiday-cell"></td>`;
-                        } else {
-                            const st = (attendance[dStr] && attendance[dStr][no]) || '';
-                            let mark = ''; 
-                            if(st==='มา'){ mark='/'; s.มา++; } 
-                            else if(st==='ลา'){ mark='ล'; s.ลา++; } 
-                            else if(st==='ขาด'){ mark='ข'; s.ขาด++; } 
-                            else if(st==='สาย'){ mark='ส'; s.สาย++; }
-                            dCells += `<td>${mark}</td>`;
-                        }
+                        if(d <= daysInMonth) {
+                            if(dayOfWeek === 0 || dayOfWeek === 6 || holidays[dStr]) dCells += `<td class="holiday-cell"></td>`;
+                            else {
+                                const st = (attendance[dStr] && attendance[dStr][no]) || '';
+                                let mark = ''; 
+                                if(st==='มา'){ mark='/'; s.มา++; } 
+                                else if(st==='ลา'){ mark='ล'; s.ลา++; } 
+                                else if(st==='ขาด'){ mark='ข'; s.ขาด++; } 
+                                else if(st==='สาย'){ mark='ส'; s.สาย++; }
+                                dCells += `<td>${mark}</td>`;
+                            }
+                        } else { dCells += `<td class="holiday-cell"></td>`; }
                     }
-                    const per = schoolDaysInMonth > 0 ? ((s.มา/schoolDaysInMonth)*100).toFixed(0) : '0';
+                    const per = activeDays > 0 ? ((s.มา/activeDays)*100).toFixed(0) : '0';
                     rows += `<tr><td>${idx+1}</td><td class="name-col font-bold">${students[no].name}</td>${dCells}<td>${s.มา}</td><td>${s.สาย}</td><td>${s.ลา}</td><td>${s.ขาด}</td><td class="font-bold">${per}%</td></tr>`;
                 });
 
                 const html = `
-                    <div style="text-align:center; position:relative;">
+                    <div style="text-align:center;">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Seal_of_the_Office_of_the_Basic_Education_Commission.png" style="width:40px; margin-bottom:5px;">
                         <h2 style="font-size:16px; font-weight:bold; margin:0;">โรงเรียนบ้านควนเนียง</h2>
                         <p style="font-size:12px; margin:2px;">แบบบันทึกการมาเรียน ประจำเดือน ${monthNames[month-1]} พุทธศักราช ${parseInt(year)+543}</p>
                         <p style="font-size:10px; margin-bottom:10px;">ชั้นเรียน: ${document.getElementById('reportGrade').options[document.getElementById('reportGrade').selectedIndex].text} | ปีการศึกษา: ${y}</p>
                         <table class="report-table">
                             <thead>
-                                <tr>
-                                    <th rowspan="2" class="no-col">ที่</th>
-                                    <th rowspan="2" class="name-col">ชื่อ-สกุล</th>
-                                    <th colspan="${daysInMonth}">วันที่</th>
-                                    <th colspan="4" style="width:100px;">สรุป (วัน)</th>
-                                    <th rowspan="2" class="percent-col">%</th>
-                                </tr>
-                                <tr>
-                                    ${Array.from({length:daysInMonth}, (_, i) => `<th class="day-col">${i+1}</th>`).join('')}
-                                    <th class="stat-col">มา</th><th class="stat-col">สาย</th><th class="stat-col">ลา</th><th class="stat-col">ขาด</th>
-                                </tr>
+                                <tr><th rowspan="2" class="no-col">ที่</th><th rowspan="2" class="name-col">ชื่อ-สกุล</th><th colspan="${daysInMonth}">วันที่</th><th colspan="4" style="width:100px;">สรุป (วัน)</th><th rowspan="2" class="percent-col">%</th></tr>
+                                <tr>${Array.from({length:daysInMonth}, (_, i) => `<th class="day-col">${i+1}</th>`).join('')}<th class="stat-col">มา</th><th class="stat-col">สาย</th><th class="stat-col">ลา</th><th class="stat-col">ขาด</th></tr>
                             </thead>
                             <tbody>${rows}</tbody>
                         </table>
                         <div style="text-align:left; font-size:9px; margin-top:10px; display:flex; gap:20px;">
                             <span>สัญลักษณ์: / = มาเรียน, ส = สาย, ล = ลา, ข = ขาด, <span style="display:inline-block; width:12px; height:12px; background:#94a3b8; border:1px solid #000; vertical-align:middle;"></span> = วันหยุด/ส.-อา./หยุดพิเศษ</span>
                         </div>
-                        <div style="text-align:right; font-size:9px; margin-top:5px;">*คิดเปอร์เซ็นต์จากวันที่ทำการจริง (${schoolDaysInMonth} วัน) หักวันหยุดพิเศษแล้ว</div>
+                        <div style="text-align:right; font-size:9px; margin-top:5px;">*คิดเปอร์เซ็นต์จากวันที่ทำการจริง (${activeDays} วัน) หักวันหยุดพิเศษแล้ว</div>
                     </div>`;
                 document.getElementById('reportPreview').innerHTML = html;
                 document.getElementById('printArea').innerHTML = html;
@@ -328,19 +314,20 @@
             });
         };
 
-        // --- ระบบสรุปรายเทอม หักวันหยุดพิเศษออกจากเปอร์เซ็นต์อัตโนมัติ ---
+        // แก้ไขฟังก์ชันสรุปรายเทอมให้นับวันทำงานได้แม่นยำ
         window.loadSummary = () => {
             const y = document.getElementById('sumYear').value, t = document.getElementById('sumTerm').value, g = document.getElementById('sumGrade').value;
             onValue(ref(db, `school/${g}/${y}/${t}`), (snap) => {
                 const data = snap.val() || {}, termDates = data.termDates || {}, students = data.students || {}, attendance = data.attendance || {}, holidays = data.holidays || {};
                 if(!termDates.start) return alert("กรุณากำหนดเปิด-ปิดเทอมก่อน");
                 
-                let totalSchoolDays = 0;
+                let totalDays = 0;
                 const start = new Date(termDates.start); const end = new Date(termDates.end);
+                
+                // แก้ไข Loop การหาจำนวนวันทำการจริง (เพิ่มเงื่อนไข <= ให้รวมวันปิดเทอม)
                 for(let d=new Date(start); d<=end; d.setDate(d.getDate()+1)) {
                     const ds = d.toISOString().split('T')[0];
-                    // นับเป็นวันทำการเฉพาะวันที่ไม่ใช่ ส-อา และไม่ใช่หยุดพิเศษ
-                    if(d.getDay()!==0 && d.getDay()!==6 && !holidays[ds]) totalSchoolDays++;
+                    if(d.getDay()!==0 && d.getDay()!==6 && !holidays[ds]) totalDays++;
                 }
 
                 const tbody = document.getElementById('summaryTableBody');
@@ -348,10 +335,13 @@
                 Object.keys(students).sort((a,b)=>a-b).forEach(no => {
                     let s = { มา: 0, ลา: 0, สาย: 0, ขาด: 0 };
                     Object.keys(attendance).forEach(date => {
-                        const st = attendance[date][no];
-                        if(st) s[st]++;
+                        const checkD = new Date(date);
+                        if(checkD >= start && checkD <= end) {
+                            const st = attendance[date][no];
+                            if(st) s[st]++;
+                        }
                     });
-                    const per = totalSchoolDays > 0 ? ((s.มา/totalSchoolDays)*100).toFixed(1) : '0';
+                    const per = totalDays > 0 ? ((s.มา/totalDays)*100).toFixed(1) : '0';
                     tbody.innerHTML += `<tr><td class="p-3 border">${no}</td><td class="p-3 border text-left font-bold">${students[no].name}</td><td class="p-3 border">${s.มา}</td><td class="p-3 border text-blue-600">${s.ลา}</td><td class="p-3 border text-red-600">${s.ขาด}</td><td class="p-3 border text-amber-600">${s.สาย}</td><td class="p-3 border bg-yellow-50 text-green-900">${per}%</td></tr>`;
                 });
             });
