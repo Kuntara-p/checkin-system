@@ -3,68 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบเช็คชื่อนักเรียนวิทยาศาสตร์</title>
+    <title>ระบบเช็คชื่อนักเรียนวิทยาศาสตร์ - แบบละเอียด</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap');
-        body { font-family: 'Sarabun', sans-serif; background-color: #f1f5f9; }
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white; padding: 0; }
-            .print-container { width: 100%; box-shadow: none; border: none; margin: 0; padding: 0; }
-            table { border: 1px solid black !important; width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid black !important; padding: 4px !important; font-size: 12px; }
-            .page-break { page-break-after: always; }
-        }
+        body { font-family: 'Sarabun', sans-serif; background-color: #f3f4f6; }
+        .btn-status { transition: all 0.2s; border: 1.5px solid #e5e7eb; border-radius: 6px; font-weight: bold; font-size: 13px; padding: 6px 12px; display: flex; align-items: center; gap: 6px; }
+        .status-มา { background-color: #065f46; color: white; border-color: #065f46; }
+        .status-ขาด { background-color: #991b1b; color: white; border-color: #991b1b; }
+        .status-สาย { background-color: #d97706; color: white; border-color: #d97706; }
+        .status-ป่วย { background-color: #0369a1; color: white; border-color: #0369a1; }
+        .status-ลา { background-color: #1e40af; color: white; border-color: #1e40af; }
+        .status-หนี { background-color: #111827; color: white; border-color: #111827; }
+        
+        .unselected { background-color: white; color: #4b5563; }
+        @media print { .no-print { display: none !important; } }
     </style>
 </head>
 <body class="flex min-h-screen">
 
-    <div class="w-64 bg-slate-900 text-white flex flex-col no-print shadow-2xl">
-        <div class="p-6 text-xl font-bold border-b border-slate-700 text-cyan-400">
-            <i class="fas fa-list-check mr-2"></i> ระบบเช็คชื่อ
+    <div class="w-64 bg-slate-900 text-white flex flex-col no-print shadow-xl">
+        <div class="p-6 text-xl font-bold border-b border-slate-700 text-purple-400">
+            <i class="fas fa-microscope mr-2"></i> SCI-SYSTEM
         </div>
         <nav class="flex-1 mt-4">
-            <p class="px-6 text-[10px] text-slate-400 uppercase font-bold mb-2">เลือกชั้นเรียน</p>
-            <button onclick="changeGrade('P3', 'ป.3')" id="btn-P3" class="grade-btn w-full text-left px-6 py-4 hover:bg-slate-800 flex items-center gap-3 transition-all">ชั้นประถมศึกษาปีที่ 3</button>
-            <button onclick="changeGrade('P4', 'ป.4')" id="btn-P4" class="grade-btn w-full text-left px-6 py-4 hover:bg-slate-800 flex items-center gap-3 transition-all">ชั้นประถมศึกษาปีที่ 4</button>
-            <button onclick="changeGrade('P5', 'ป.5')" id="btn-P5" class="grade-btn w-full text-left px-6 py-4 hover:bg-slate-800 flex items-center gap-3 transition-all bg-indigo-600">ชั้นประถมศึกษาปีที่ 5</button>
-            <button onclick="changeGrade('P6', 'ป.6')" id="btn-P6" class="grade-btn w-full text-left px-6 py-4 hover:bg-slate-800 flex items-center gap-3 transition-all">ชั้นประถมศึกษาปีที่ 6</button>
+            <button onclick="changeGrade('P3', 'ชั้นประถมศึกษาปีที่ 3')" id="btn-P3" class="grade-btn w-full text-left px-6 py-4 hover:bg-slate-800 flex items-center gap-3">ป.3</button>
+            <button onclick="changeGrade('P4', 'ชั้นประถมศึกษาปีที่ 4')" id="btn-P4" class="grade-btn w-full text-left px-6 py-4 hover:bg-slate-800 flex items-center gap-3">ป.4</button>
+            <button onclick="changeGrade('P5', 'ชั้นประถมศึกษาปีที่ 5')" id="btn-P5" class="grade-btn w-full text-left px-6 py-4 hover:bg-slate-800 flex items-center gap-3 bg-purple-700">ป.5</button>
+            <button onclick="changeGrade('P6', 'ชั้นประถมศึกษาปีที่ 6')" id="btn-P6" class="grade-btn w-full text-left px-6 py-4 hover:bg-slate-800 flex items-center gap-3">ป.6</button>
         </nav>
     </div>
 
     <div class="flex-1 flex flex-col overflow-hidden">
-        <header class="bg-white p-4 shadow flex justify-between items-center no-print">
-            <div class="flex items-center gap-4">
-                <h2 class="text-xl font-bold text-slate-800" id="titleText">ชั้นประถมศึกษาปีที่ 5</h2>
-                <input type="date" id="checkDate" class="border rounded-lg p-2 text-sm bg-slate-50 outline-none focus:ring-2 focus:ring-indigo-500">
+        
+        <header class="bg-white p-6 shadow-sm no-print border-b">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">ปีการศึกษา</label>
+                    <select id="year" class="w-full border rounded-lg p-2 bg-gray-50">
+                        <option value="2569">2569</option>
+                        <option value="2570">2570</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">ภาคเรียน</label>
+                    <select id="term" class="w-full border rounded-lg p-2 bg-gray-50">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">ห้องประจำชั้น</label>
+                    <select id="room" class="w-full border rounded-lg p-2 bg-gray-50">
+                        <option id="currentGradeLabel" value="1">ชั้นประถมศึกษาปีที่ 5</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1">เลือกวันที่</label>
+                    <input type="date" id="checkDate" class="w-full border rounded-lg p-2 bg-gray-50">
+                </div>
             </div>
-            <div class="flex gap-2">
-                <button onclick="document.getElementById('modal').classList.remove('hidden')" class="bg-emerald-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-700 shadow shadow-emerald-200">
-                    <i class="fas fa-user-plus mr-1"></i> เพิ่มนักเรียน
-                </button>
-                <button onclick="window.print()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-indigo-700 shadow shadow-indigo-200">
-                    <i class="fas fa-print mr-1"></i> พิมพ์รายงาน
-                </button>
+            <div class="flex justify-end gap-2">
+                <button onclick="document.getElementById('modal').classList.remove('hidden')" class="bg-emerald-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-emerald-700"><i class="fas fa-user-plus mr-1"></i> เพิ่มนักเรียน</button>
+                <button onclick="window.print()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-indigo-700"><i class="fas fa-print mr-1"></i> พิมพ์รายงาน</button>
             </div>
         </header>
 
         <main class="flex-1 p-6 overflow-auto">
-            <div class="bg-white p-8 rounded-xl shadow-lg print-container mx-auto max-w-5xl">
+            <div class="bg-white p-8 rounded-xl shadow-lg border">
                 <div class="text-center mb-6">
-                    <h3 class="text-2xl font-bold" id="printHeader">บัญชีลงเวลาเรียนนักเรียน ชั้นประถมศึกษาปีที่ 5</h3>
-                    <p class="text-slate-500 no-print">คลิกที่ช่องวันที่เพื่อบันทึกสถานะ (มา, ลา, ขาด)</p>
+                    <h3 class="text-2xl font-bold" id="displayHeader">รายงานเช็คเวลาเรียนวิชาวิทยาศาสตร์</h3>
+                    <div class="inline-block bg-sky-50 text-sky-700 px-4 py-1 rounded-full text-sm font-bold mt-2" id="subInfo">ชั้นประถมศึกษาปีที่ 5 | วันที่ 26/05/2569</div>
                 </div>
 
                 <table class="w-full border-collapse">
-                    <thead class="bg-slate-50">
+                    <thead class="bg-gray-50">
                         <tr>
-                            <th class="border p-2 w-12 text-center">เลขที่</th>
-                            <th class="border p-2 w-32 text-center">รหัสประจำตัว</th>
-                            <th class="border p-2 text-left">ชื่อ - นามสกุล</th>
-                            <th class="border p-2 w-28 text-center" id="dateHeader">สถานะ</th>
-                            <th class="border p-2 w-24 text-center no-print">จัดการ</th>
+                            <th class="border p-3 w-16 text-center text-sm font-bold text-gray-600">ลำดับ</th>
+                            <th class="border p-3 w-32 text-center text-sm font-bold text-gray-600">รหัส</th>
+                            <th class="border p-3 text-left text-sm font-bold text-gray-600">ชื่อ - สกุล</th>
+                            <th class="border p-3 text-center text-sm font-bold text-gray-600">สถานะการเข้าเรียน</th>
                         </tr>
                     </thead>
                     <tbody id="studentBody">
@@ -75,21 +94,22 @@
     </div>
 
     <div id="modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50 no-print">
-        <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl">
-            <h3 class="text-xl font-bold mb-6 text-slate-800">ข้อมูลนักเรียนใหม่</h3>
+        <div class="bg-white rounded-xl p-8 w-full max-w-md shadow-2xl">
+            <h3 class="text-xl font-bold mb-6 text-indigo-900 border-b pb-2">ลงทะเบียนนักเรียนใหม่</h3>
             <div class="grid grid-cols-2 gap-4 mb-4">
-                <input type="number" id="m_no" placeholder="เลขที่" class="border p-3 rounded-xl">
-                <input type="text" id="m_id" placeholder="รหัสประจำตัว" class="border p-3 rounded-xl">
+                <input type="number" id="m_no" placeholder="เลขที่" class="border p-3 rounded-lg outline-none focus:ring-2 focus:ring-purple-500">
+                <input type="text" id="m_id" placeholder="รหัสประจำตัว" class="border p-3 rounded-lg outline-none focus:ring-2 focus:ring-purple-500">
             </div>
-            <select id="m_prefix" class="w-full border p-3 rounded-xl mb-4 bg-white">
+            <select id="m_prefix" class="w-full border p-3 rounded-lg mb-4 bg-white outline-none focus:ring-2 focus:ring-purple-500">
                 <option value="เด็กชาย">เด็กชาย</option>
                 <option value="เด็กหญิง">เด็กหญิง</option>
+                <option value="นาย">นาย</option>
+                <option value="นางสาว">นางสาว</option>
             </select>
-            <input type="text" id="m_name" placeholder="ชื่อ - นามสกุล" class="w-full border p-3 rounded-xl mb-6">
-            
+            <input type="text" id="m_name" placeholder="ชื่อ-นามสกุล" class="w-full border p-3 rounded-lg mb-6 outline-none focus:ring-2 focus:ring-purple-500">
             <div class="flex gap-3">
-                <button id="saveBtn" class="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700">บันทึก</button>
-                <button onclick="document.getElementById('modal').classList.add('hidden')" class="flex-1 bg-slate-100 py-3 rounded-xl font-bold">ยกเลิก</button>
+                <button id="saveBtn" class="flex-1 bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 transition-all">บันทึกข้อมูล</button>
+                <button onclick="document.getElementById('modal').classList.add('hidden')" class="flex-1 bg-gray-100 py-3 rounded-lg font-bold hover:bg-gray-200 text-gray-600">ยกเลิก</button>
             </div>
         </div>
     </div>
@@ -111,102 +131,76 @@
         const db = getDatabase(app);
 
         let currentGrade = 'P5';
-        let gradeText = 'ชั้นประถมศึกษาปีที่ 5';
+        let gradeLabel = 'ชั้นประถมศึกษาปีที่ 5';
 
-        // ตั้งค่าวันที่เริ่มต้นเป็นวันนี้
-        const dateInput = document.getElementById('checkDate');
-        dateInput.valueAsDate = new Date();
+        const dateInp = document.getElementById('checkDate');
+        dateInp.valueAsDate = new Date();
 
-        window.changeGrade = (g, t) => {
-            currentGrade = g;
-            gradeText = t;
-            document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('bg-indigo-600'));
-            document.getElementById('btn-'+g).classList.add('bg-indigo-600');
-            document.getElementById('titleText').innerText = t;
-            document.getElementById('printHeader').innerText = `บัญชีลงเวลาเรียนนักเรียน ${t}`;
+        window.changeGrade = (g, l) => {
+            currentGrade = g; gradeLabel = l;
+            document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('bg-purple-700'));
+            document.getElementById('btn-'+g).classList.add('bg-purple-700');
+            document.getElementById('currentGradeLabel').innerText = l;
             loadData();
         };
 
-        // ฟังก์ชันบันทึกนักเรียน
+        // บันทึกนักเรียน
         document.getElementById('saveBtn').onclick = async () => {
             const no = document.getElementById('m_no').value;
             const id = document.getElementById('m_id').value;
-            const prefix = document.getElementById('m_prefix').value;
+            const pre = document.getElementById('m_prefix').value;
             const name = document.getElementById('m_name').value;
-
-            if(!no || !name) return alert("กรุณาระบุเลขที่และชื่อนักเรียน");
-
+            if(!no || !name) return alert("กรุณากรอกข้อมูลสำคัญให้ครบ");
+            
             try {
-                await set(ref(db, `school/${currentGrade}/students/${no}`), {
-                    studentId: id,
-                    prefix: prefix,
-                    name: name
-                });
-                alert("บันทึกสำเร็จ!");
+                await set(ref(db, `school/${currentGrade}/students/${no}`), { studentId: id, name: pre + name });
                 document.getElementById('modal').classList.add('hidden');
-                ['m_no', 'm_id', 'm_name'].forEach(i => document.getElementById(i).value = '');
-            } catch (e) { alert("เกิดข้อผิดพลาด: " + e.message); }
-        };
-
-        // ฟังก์ชันเช็คชื่อ (คลิกที่ช่องสถานะ)
-        window.markStatus = async (no, currentStatus) => {
-            const date = dateInput.value;
-            if(!date) return alert("กรุณาเลือกวันที่ก่อน");
-
-            const status = prompt("ระบุสถานะ (มา, ขาด, ลา, สาย):", currentStatus || "มา");
-            if (status === null) return;
-
-            try {
-                await set(ref(db, `school/${currentGrade}/attendance/${date}/${no}`), status);
+                alert("บันทึกสำเร็จ!");
             } catch (e) { alert(e.message); }
         };
 
-        // ลบชื่อนักเรียน
-        window.removeStudent = (no) => {
-            if(confirm("ลบรายชื่อนักเรียนเลขที่ " + no + "?")) {
-                remove(ref(db, `school/${currentGrade}/students/${no}`));
-            }
+        // ฟังก์ชันอัปเดตสถานะ (ตรงตามภาพที่ 3)
+        window.updateStatus = async (no, status) => {
+            const date = dateInp.value;
+            await set(ref(db, `school/${currentGrade}/attendance/${date}/${no}`), status);
         };
 
-        // โหลดข้อมูล
         function loadData() {
-            const date = dateInput.value;
-            document.getElementById('dateHeader').innerText = date;
+            const date = dateInp.value;
+            document.getElementById('subInfo').innerText = `${gradeLabel} | วันที่ ${date}`;
             
             onValue(ref(db, `school/${currentGrade}`), (snap) => {
                 const data = snap.val() || {};
                 const students = data.students || {};
                 const attendance = (data.attendance && data.attendance[date]) || {};
-                
                 const tbody = document.getElementById('studentBody');
                 tbody.innerHTML = '';
 
-                Object.keys(students).sort((a,b) => a-b).forEach(no => {
+                Object.keys(students).sort((a,b)=>a-b).forEach(no => {
                     const s = students[no];
-                    const status = attendance[no] || '';
+                    const currentStatus = attendance[no] || '';
                     const row = `
-                        <tr class="hover:bg-slate-50 transition-all border-b">
+                        <tr class="border-b hover:bg-gray-50">
                             <td class="border p-3 text-center font-bold">${no}</td>
-                            <td class="border p-3 text-center text-slate-600">${s.studentId || '-'}</td>
-                            <td class="border p-3">${s.prefix}${s.name}</td>
-                            <td onclick="markStatus('${no}', '${status}')" class="border p-3 text-center cursor-pointer font-bold ${status==='มา'?'text-emerald-600':status?'text-red-500':''}">
-                                ${status || '-'}
+                            <td class="border p-3 text-center text-gray-500">${s.studentId || '-'}</td>
+                            <td class="border p-3 font-medium">${s.name}</td>
+                            <td class="border p-3">
+                                <div class="flex flex-wrap justify-center gap-2">
+                                    <button onclick="updateStatus('${no}', 'มา')" class="btn-status ${currentStatus==='มา'?'status-มา':'unselected'}"><i class="fas fa-check-circle"></i> มา</button>
+                                    <button onclick="updateStatus('${no}', 'ขาด')" class="btn-status ${currentStatus==='ขาด'?'status-ขาด':'unselected'}"><i class="fas fa-times-circle"></i> ขาด</button>
+                                    <button onclick="updateStatus('${no}', 'สาย')" class="btn-status ${currentStatus==='สาย'?'status-สาย':'unselected'}"><i class="fas fa-clock"></i> สาย</button>
+                                    <button onclick="updateStatus('${no}', 'ป่วย')" class="btn-status ${currentStatus==='ป่วย'?'status-ป่วย':'unselected'}"><i class="fas fa-first-aid"></i> ป่วย</button>
+                                    <button onclick="updateStatus('${no}', 'ลา')" class="btn-status ${currentStatus==='ลา'?'status-ลา':'unselected'}"><i class="fas fa-file-alt"></i> ลา</button>
+                                    <button onclick="updateStatus('${no}', 'หนี')" class="btn-status ${currentStatus==='หนี'?'status-หนี':'unselected'}"><i class="fas fa-running"></i> หนี</button>
+                                </div>
                             </td>
-                            <td class="border p-3 text-center no-print">
-                                <button onclick="removeStudent('${no}')" class="text-slate-300 hover:text-red-500"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                    `;
+                        </tr>`;
                     tbody.innerHTML += row;
                 });
-
-                if(Object.keys(students).length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" class="p-10 text-center text-slate-400 italic">ไม่มีข้อมูลนักเรียนในชั้นนี้</td></tr>';
-                }
             });
         }
 
-        dateInput.onchange = loadData;
+        dateInp.onchange = loadData;
         loadData();
     </script>
 </body>
