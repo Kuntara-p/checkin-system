@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Kanit', sans-serif; background-color: #1a1c2e; color: white; }
+        body { font-family: 'Kanit', sans-serif; background-color: #1a1c2e; color: white; margin: 0; }
         .hidden { display: none !important; }
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
     </style>
 </head>
 <body>
@@ -23,8 +24,8 @@
             <div class="space-y-4">
                 <input type="email" id="email" placeholder="อีเมลของคุณครู" class="w-full bg-[#1a1c2e] border border-gray-600 rounded-xl p-3 focus:outline-none focus:border-indigo-500 transition-all text-white">
                 <input type="password" id="password" placeholder="รหัสผ่าน" class="w-full bg-[#1a1c2e] border border-gray-600 rounded-xl p-3 focus:outline-none focus:border-indigo-500 transition-all text-white">
-                <p id="loginError" class="text-red-400 text-sm hidden"></p>
-                <button onclick="handleLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded-xl font-bold transition-all shadow-lg text-white">เข้าสู่ระบบ</button>
+                <p id="loginError" class="text-red-400 text-sm hidden text-center"></p>
+                <button id="btnLogin" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded-xl font-bold transition-all shadow-lg text-white">เข้าสู่ระบบ</button>
             </div>
         </div>
     </div>
@@ -35,27 +36,27 @@
                 <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">ระบบเช็คชื่อนักเรียน</h1>
                 <p class="text-gray-400">จัดการข้อมูลและเช็คชื่อแบบ Real-time</p>
             </div>
-            <button onclick="handleLogout()" class="bg-red-500/10 text-red-400 border border-red-500/50 px-4 py-2 rounded-xl hover:bg-red-500 hover:text-white transition-all">
+            <button id="btnLogout" class="bg-red-500/10 text-red-400 border border-red-500/50 px-4 py-2 rounded-xl hover:bg-red-500 hover:text-white transition-all">
                 <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
             </button>
         </div>
 
         <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
-            <div class="bg-[#252841] p-6 rounded-2xl border border-gray-700">
+            <div class="bg-[#252841] p-6 rounded-2xl border border-gray-700 shadow-xl">
                 <h3 class="mb-4 text-indigo-400 font-medium"><i class="fas fa-calendar-alt"></i> 1. เลือกวันที่เช็คชื่อ</h3>
-                <input type="date" id="checkDate" class="w-full bg-[#1a1c2e] border border-gray-600 rounded-xl p-3 text-white">
+                <input type="date" id="checkDate" class="w-full bg-[#1a1c2e] border border-gray-600 rounded-xl p-3 text-white focus:outline-none focus:border-indigo-500">
             </div>
-            <div class="bg-[#252841] p-6 rounded-2xl border border-gray-700">
+            <div class="bg-[#252841] p-6 rounded-2xl border border-gray-700 shadow-xl">
                 <h3 class="mb-4 text-indigo-400 font-medium"><i class="fas fa-user-plus"></i> 2. เพิ่มนักเรียนใหม่</h3>
                 <div class="flex gap-2">
-                    <input type="text" id="stdId" placeholder="รหัส" class="w-24 bg-[#1a1c2e] border border-gray-600 rounded-xl p-3 text-white">
-                    <input type="text" id="stdName" placeholder="ชื่อ-นามสกุล" class="flex-1 bg-[#1a1c2e] border border-gray-600 rounded-xl p-3 text-white">
-                    <button onclick="addStudent()" class="bg-indigo-600 px-4 rounded-xl hover:bg-indigo-500 transition-all text-white"><i class="fas fa-plus"></i></button>
+                    <input type="text" id="stdId" placeholder="รหัส" class="w-24 bg-[#1a1c2e] border border-gray-600 rounded-xl p-3 text-white focus:outline-none focus:border-indigo-500">
+                    <input type="text" id="stdName" placeholder="ชื่อ-นามสกุล" class="flex-1 bg-[#1a1c2e] border border-gray-600 rounded-xl p-3 text-white focus:outline-none focus:border-indigo-500">
+                    <button id="btnAddStd" class="bg-indigo-600 px-6 rounded-xl hover:bg-indigo-500 transition-all text-white shadow-lg"><i class="fas fa-plus"></i></button>
                 </div>
             </div>
         </div>
 
-        <div id="studentGrid" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="studentGrid" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
             </div>
     </div>
 
@@ -71,26 +72,29 @@
             projectId: "mycheckin-ba316",
             storageBucket: "mycheckin-ba316.firebasestorage.app",
             messagingSenderId: "70860501032",
-            appId: "1:70860501032:web:6cf057afbdd8330848451d",
-            measurementId: "G-34YNM7B1N0"
+            appId: "1:70860501032:web:6cf057afbdd8330848451d"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getDatabase(app);
 
+        // ตรวจสอบสถานะ Login
         onAuthStateChanged(auth, (user) => {
+            const loginPage = document.getElementById('loginPage');
+            const mainPage = document.getElementById('mainPage');
             if (user) {
-                document.getElementById('loginPage').classList.add('hidden');
-                document.getElementById('mainPage').classList.remove('hidden');
+                loginPage.classList.add('hidden');
+                mainPage.classList.remove('hidden');
                 loadStudents();
             } else {
-                document.getElementById('loginPage').classList.remove('hidden');
-                document.getElementById('mainPage').classList.add('hidden');
+                loginPage.classList.remove('hidden');
+                mainPage.classList.add('hidden');
             }
         });
 
-        window.handleLogin = async () => {
+        // ฟังก์ชัน Login
+        document.getElementById('btnLogin').addEventListener('click', async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorMsg = document.getElementById('loginError');
@@ -101,11 +105,13 @@
                 errorMsg.innerText = "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
                 errorMsg.classList.remove('hidden');
             }
-        };
+        });
 
-        window.handleLogout = () => signOut(auth);
+        // ฟังก์ชัน Logout
+        document.getElementById('btnLogout').addEventListener('click', () => signOut(auth));
 
-        window.addStudent = () => {
+        // ฟังก์ชันเพิ่มนักเรียน
+        document.getElementById('btnAddStd').addEventListener('click', () => {
             const id = document.getElementById('stdId').value;
             const name = document.getElementById('stdName').value;
             if (id && name) {
@@ -114,24 +120,29 @@
                     document.getElementById('stdName').value = '';
                 });
             } else { alert("กรุณากรอกรหัสและชื่อนักเรียน"); }
-        };
+        });
 
-        window.deleteStudent = (id) => {
-            if (confirm('ยืนยันการลบนักเรียนรหัส ' + id + '?')) {
-                remove(ref(db, 'students/' + id));
-            }
-        };
-
+        // ฟังก์ชันเช็คชื่อ (ทำผ่าน window เพื่อให้เรียกจาก HTML ที่สร้างใหม่ได้)
         window.checkAttendance = (id, name, status) => {
             const date = document.getElementById('checkDate').value;
             if (!date) return alert("กรุณาเลือกวันที่");
             set(ref(db, 'attendance/' + date + '/' + id), {
                 name: name,
                 status: status,
-                timestamp: new Date().toLocaleTimeString()
-            }).then(() => { alert("บันทึก " + name + " (" + status + ") เรียบร้อย"); });
+                timestamp: new Date().toLocaleTimeString('th-TH')
+            }).then(() => { 
+                alert("บันทึก " + name + " (" + status + ") เรียบร้อย"); 
+            });
         };
 
+        // ฟังก์ชันลบนักเรียน
+        window.deleteStudent = (id) => {
+            if (confirm('ยืนยันการลบนักเรียนรหัส ' + id + '?')) {
+                remove(ref(db, 'students/' + id));
+            }
+        };
+
+        // โหลดข้อมูลนักเรียน
         function loadStudents() {
             onValue(ref(db, 'students'), (snapshot) => {
                 const grid = document.getElementById('studentGrid');
@@ -141,12 +152,12 @@
                     Object.keys(data).forEach(id => {
                         const std = data[id];
                         grid.innerHTML += `
-                            <div class="bg-[#252841] border border-gray-700 rounded-2xl p-6 relative shadow-lg">
+                            <div class="bg-[#252841] border border-gray-700 rounded-2xl p-6 relative shadow-lg hover:border-indigo-500 transition-all">
                                 <button onclick="deleteStudent('${id}')" class="absolute top-4 right-4 text-gray-500 hover:text-red-400 transition-all">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                                 <div class="flex items-center gap-4 mb-6">
-                                    <div class="w-12 h-12 bg-indigo-500 rounded-full flex items-center justify-center font-bold text-xl">
+                                    <div class="w-12 h-12 bg-indigo-500 rounded-full flex items-center justify-center font-bold text-xl text-white">
                                         ${std.name.charAt(0)}
                                     </div>
                                     <div>
@@ -166,6 +177,8 @@
                 }
             });
         }
+
+        // ตั้งค่าวันที่ปัจจุบันเป็นค่าเริ่มต้น
         document.getElementById('checkDate').valueAsDate = new Date();
     </script>
 </body>
