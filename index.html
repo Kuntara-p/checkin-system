@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบเช็คชื่อนักเรียนสมัยใหม่</title>
+    <title>ระบบเช็คชื่อนักเรียน - MyCheckin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -15,38 +15,38 @@
 
     <div id="loginPage" class="fixed inset-0 bg-[#1a1c2e] z-50 flex items-center justify-center p-4">
         <div class="bg-[#252841] p-8 rounded-3xl shadow-2xl w-full max-w-md border border-gray-700 text-center">
-            <i class="fas fa-user-shield text-5xl text-purple-500 mb-6"></i>
-            <h2 class="text-2xl font-bold mb-6">ลงชื่อเข้าใช้งาน (สำหรับครู)</h2>
-            <input type="email" id="email" placeholder="อีเมล" class="w-full bg-[#1a1c2e] border border-gray-600 rounded-xl p-3 mb-4 text-white">
+            <i class="fas fa-chalkboard-teacher text-5xl text-purple-500 mb-6"></i>
+            <h2 class="text-2xl font-bold mb-6">เข้าสู่ระบบเช็คชื่อ</h2>
+            <input type="email" id="email" placeholder="อีเมลครู" class="w-full bg-[#1a1c2e] border border-gray-600 rounded-xl p-3 mb-4 text-white">
             <input type="password" id="password" placeholder="รหัสผ่าน" class="w-full bg-[#1a1c2e] border border-gray-600 rounded-xl p-3 mb-6 text-white">
-            <button onclick="handleLogin()" class="w-full bg-purple-600 hover:bg-purple-500 py-3 rounded-xl font-bold transition-all">เข้าสู่ระบบ</button>
+            <button onclick="handleLogin()" class="w-full bg-purple-600 hover:bg-purple-500 py-3 rounded-xl font-bold transition-all shadow-lg shadow-purple-500/20">เข้าสู่ระบบ</button>
             <p id="loginError" class="text-red-400 mt-4 text-sm hidden">อีเมลหรือรหัสผ่านไม่ถูกต้อง</p>
         </div>
     </div>
 
     <div id="mainPage" class="hidden">
         <div class="max-w-6xl mx-auto pt-10 px-4">
-            <div class="bg-gradient-to-r from-purple-600 to-indigo-700 rounded-3xl p-8 mb-8 shadow-xl flex justify-between items-center">
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-700 rounded-3xl p-8 mb-8 shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
                     <h1 class="text-3xl font-bold mb-2">รายวิชาคอมพิวเตอร์กราฟิก</h1>
-                    <p class="opacity-80">จัดการรายชื่อและเช็คชื่อนักเรียนแบบเรียลไทม์</p>
+                    <p class="opacity-80">โรงเรียนของคุณครู | จัดการข้อมูลแบบ Real-time</p>
                 </div>
-                <button onclick="handleLogout()" class="bg-red-500/20 hover:bg-red-500 text-red-100 p-3 rounded-full transition-all">
-                    <i class="fas fa-sign-out-alt"></i>
+                <button onclick="handleLogout()" class="bg-red-500/20 hover:bg-red-500 text-red-100 px-6 py-2 rounded-full transition-all border border-red-500/50">
+                    <i class="fas fa-sign-out-alt mr-2"></i>ออกจากระบบ
                 </button>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
                 <div class="bg-[#252841] p-6 rounded-2xl border border-gray-700">
-                    <h3 class="mb-4 text-gray-400"><i class="fas fa-calendar-alt mr-2"></i>เลือกวันที่เช็คชื่อ</h3>
-                    <input type="date" id="checkDate" class="w-full bg-[#1a1c2e] border border-gray-600 rounded-xl p-3 text-white">
+                    <h3 class="mb-4 text-purple-400 font-medium"><i class="fas fa-calendar-day mr-2"></i>วันที่ต้องการเช็คชื่อ</h3>
+                    <input type="date" id="checkDate" class="w-full bg-[#1a1c2e] border border-gray-600 rounded-xl p-3 text-white focus:border-purple-500 outline-none">
                 </div>
                 <div class="bg-[#252841] p-6 rounded-2xl border border-gray-700">
-                    <h3 class="mb-4 text-gray-400"><i class="fas fa-user-plus mr-2"></i>เพิ่มนักเรียนใหม่</h3>
+                    <h3 class="mb-4 text-green-400 font-medium"><i class="fas fa-user-plus mr-2"></i>เพิ่มนักเรียนใหม่</h3>
                     <div class="flex gap-2">
-                        <input type="text" id="stdId" placeholder="เลขที่/รหัส" class="w-1/3 bg-[#1a1c2e] border border-gray-600 rounded-xl p-2 text-white">
-                        <input type="text" id="stdName" placeholder="ชื่อ-นามสกุล" class="flex-1 bg-[#1a1c2e] border border-gray-600 rounded-xl p-2 text-white">
-                        <button onclick="addStudent()" class="bg-green-600 hover:bg-green-500 px-4 rounded-xl transition-all"><i class="fas fa-plus"></i></button>
+                        <input type="text" id="stdId" placeholder="รหัส" class="w-1/4 bg-[#1a1c2e] border border-gray-600 rounded-xl p-2 text-white outline-none">
+                        <input type="text" id="stdName" placeholder="ชื่อ-นามสกุล" class="flex-1 bg-[#1a1c2e] border border-gray-600 rounded-xl p-2 text-white outline-none">
+                        <button onclick="addStudent()" class="bg-green-600 hover:bg-green-500 px-6 rounded-xl transition-all shadow-lg shadow-green-600/20"><i class="fas fa-plus"></i></button>
                     </div>
                 </div>
             </div>
@@ -61,15 +61,16 @@
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // *** สำคัญ: วาง Config ของคุณตรงนี้ ***
+        // คอนฟิกจากภาพของคุณครู (MyCheckin-ba316)
         const firebaseConfig = {
-            apiKey: "AIzaSy...",
-            authDomain: "your-app.firebaseapp.com",
-            databaseURL: "https://your-app-default-rtdb.firebaseio.com",
-            projectId: "your-app",
-            storageBucket: "your-app.appspot.com",
-            messagingSenderId: "...",
-            appId: "..."
+            apiKey: "AIzaSyCAaWoYfgWqBx8O1JlKuiOMmy6O2Y3cb9Q",
+            authDomain: "mycheckin-ba316.firebaseapp.com",
+            databaseURL: "https://mycheckin-ba316-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "mycheckin-ba316",
+            storageBucket: "mycheckin-ba316.firebasestorage.app",
+            messagingSenderId: "70860501032",
+            appId: "1:70860501032:web:6cf057afbdd8330848451d",
+            measurementId: "G-34YNM7B1N0"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -79,88 +80,4 @@
         // ตั้งค่าวันที่เริ่มต้นเป็นวันนี้
         document.getElementById('checkDate').valueAsDate = new Date();
 
-        // --- ระบบ Login ---
-        window.handleLogin = () => {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, email, pass).catch(err => {
-                document.getElementById('loginError').classList.remove('hidden');
-            });
-        };
-
-        window.handleLogout = () => signOut(auth);
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                document.getElementById('loginPage').classList.add('hidden');
-                document.getElementById('mainPage').classList.remove('hidden');
-                loadStudents();
-            } else {
-                document.getElementById('loginPage').classList.remove('hidden');
-                document.getElementById('mainPage').classList.add('hidden');
-            }
-        });
-
-        // --- ระบบจัดการนักเรียน ---
-        window.addStudent = () => {
-            const id = document.getElementById('stdId').value;
-            const name = document.getElementById('stdName').value;
-            if (id && name) {
-                set(ref(db, 'students/' + id), { name: name }).then(() => {
-                    document.getElementById('stdId').value = '';
-                    document.getElementById('stdName').value = '';
-                });
-            }
-        };
-
-        window.deleteStudent = (id) => {
-            if (confirm('ยืนยันการลบนักเรียนคนนี้?')) {
-                remove(ref(db, 'students/' + id));
-            }
-        };
-
-        // --- ระบบเช็คชื่อ ---
-        function loadStudents() {
-            onValue(ref(db, 'students'), (snapshot) => {
-                const grid = document.getElementById('studentGrid');
-                grid.innerHTML = '';
-                const data = snapshot.val();
-                if (data) {
-                    Object.keys(data).forEach(id => {
-                        const std = data[id];
-                        const card = document.createElement('div');
-                        card.className = "bg-[#252841] border border-gray-700 rounded-2xl p-6 shadow-lg relative";
-                        card.innerHTML = `
-                            <button onclick="deleteStudent('${id}')" class="absolute top-4 right-4 text-gray-500 hover:text-red-400"><i class="fas fa-trash"></i></button>
-                            <div class="flex items-center gap-4 mb-6">
-                                <div class="w-12 h-12 bg-indigo-500 rounded-full flex items-center justify-center font-bold text-xl">${std.name.charAt(0)}</div>
-                                <div>
-                                    <h3 class="font-bold text-lg">${std.name}</h3>
-                                    <p class="text-xs text-gray-400">รหัส: ${id}</p>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-3 gap-2">
-                                <button onclick="check('${id}', 'มา')" class="bg-green-600/20 text-green-400 hover:bg-green-600 hover:text-white py-2 rounded-xl transition-all">มา</button>
-                                <button onclick="check('${id}', 'สาย')" class="bg-yellow-600/20 text-yellow-400 hover:bg-yellow-600 hover:text-white py-2 rounded-xl transition-all">สาย</button>
-                                <button onclick="check('${id}', 'ขาด')" class="bg-red-600/20 text-red-400 hover:bg-red-600 hover:text-white py-2 rounded-xl transition-all">ขาด</button>
-                            </div>
-                        `;
-                        grid.appendChild(card);
-                    });
-                }
-            });
-        }
-
-        window.check = (id, status) => {
-            const date = document.getElementById('checkDate').value;
-            if (!date) return alert('กรุณาเลือกวันที่');
-            set(ref(db, 'attendance/' + date + '/' + id), {
-                status: status,
-                time: new Date().toLocaleTimeString('th-TH')
-            }).then(() => {
-                alert('เช็คชื่อสำเร็จ: ' + status);
-            });
-        };
-    </script>
-</body>
-</html>
+        // ฟ
