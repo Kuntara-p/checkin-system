@@ -3,30 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCIENCE SMART SYSTEM - BAN KHUAN NIANG SCHOOL V11</title>
+    <title>SCIENCE SMART SYSTEM - BAN KHUAN NIANG SCHOOL V12</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Sarabun', sans-serif; background-color: #f0fdf4; }
-        
-        /* สไตล์ตารางรายงาน */
         .report-table { border-collapse: collapse; width: 100%; table-layout: fixed; font-size: 9px; border: 1px solid #000; }
         .report-table th, .report-table td { border: 1px solid #000; padding: 2px 0; text-align: center; height: 18px; }
         .day-col { width: 20px !important; }
         .no-col { width: 30px !important; }
         .name-col { width: 165px !important; text-align: left !important; padding-left: 5px !important; }
-
-        /* สีเขียวโปร่งสำหรับช่องวันหยุดในรายงาน */
         .holiday-cell { background-color: #dcfce7 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-
         @media print {
             .no-print { display: none !important; }
             body { background: white; padding: 0; margin: 0; }
             .print-area { display: block !important; width: 297mm; padding: 5mm; }
             @page { size: A4 landscape; margin: 5mm; }
         }
-        
         .nav-tab.active { background-color: white; color: #15803d; border-radius: 8px 8px 0 0; font-weight: bold; border-top: 4px solid #15803d; }
     </style>
 </head>
@@ -36,7 +30,7 @@
         <div class="container mx-auto px-4 pt-4">
             <div class="flex items-center gap-3 mb-4">
                 <i class="fas fa-microscope text-2xl text-lime-400"></i>
-                <h1 class="text-xl font-bold uppercase tracking-tight">Science Smart System</h1>
+                <h1 class="text-xl font-bold uppercase">Science Smart System</h1>
             </div>
             <div class="flex gap-2">
                 <button onclick="showView('checkin')" id="tab-checkin" class="nav-tab active px-6 py-2 text-sm transition-all">เช็คเวลาเรียนประจำวัน</button>
@@ -69,7 +63,7 @@
                 </div>
             </div>
             <div class="flex flex-wrap gap-2">
-                <button onclick="setTermDates()" class="bg-blue-600 text-white px-4 py-2 rounded-xl font-bold shadow-md">กำหนดวันเปิด-ปิดเทอม</button>
+                <button onclick="setTermDates()" class="bg-blue-600 text-white px-4 py-2 rounded-xl font-bold shadow-md">กำหนดเปิด-ปิดเทอม</button>
                 <button onclick="toggleHoliday()" id="btnHoliday" class="bg-orange-500 text-white px-4 py-2 rounded-xl font-bold shadow-md">กำหนดวันหยุด</button>
                 <button onclick="toggleAllPresent()" id="btnAll" class="bg-green-600 text-white px-4 py-2 rounded-xl font-bold shadow-md">มาทุกคน</button>
                 <button onclick="document.getElementById('modalAdd').classList.remove('hidden')" class="bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold shadow-md">เพิ่มรายคน</button>
@@ -78,7 +72,7 @@
         </div>
 
         <div id="termDateDisplay" class="mb-4 px-6 py-2 bg-blue-50 text-blue-700 rounded-2xl border border-blue-100 text-xs font-bold italic flex items-center gap-2">
-            <i class="fas fa-info-circle"></i> <span id="termInfoText">กำลังโหลดข้อมูลภาคเรียน...</span>
+            <i class="fas fa-info-circle"></i> <span id="termInfoText">กำลังโหลดข้อมูล...</span>
         </div>
 
         <div id="holidayLabel" class="hidden mb-4 p-4 bg-red-100 text-red-700 rounded-2xl border-l-8 border-red-500 font-bold text-center"></div>
@@ -86,14 +80,19 @@
         <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-green-100">
             <table class="w-full text-left">
                 <thead class="bg-green-800 text-white text-center">
-                    <tr><th class="p-4 w-20">เลขที่</th><th>ชื่อ - นามสกุล (ชื่อเล่น)</th><th class="w-1/2 text-center">สถานะการมาเรียนวันนี้</th><th class="w-20">จัดการ</th></tr>
+                    <tr><th class="p-4 w-20">เลขที่</th><th>ชื่อ - นามสกุล (ชื่อเล่น)</th><th class="w-1/2">สถานะวันนี้</th><th class="w-20">จัดการ</th></tr>
                 </thead>
                 <tbody id="studentTableBody" class="divide-y divide-slate-100"></tbody>
             </table>
+            <div class="p-6 bg-slate-50 border-t flex justify-center">
+                <button onclick="deleteAllStudents()" class="bg-red-500 hover:bg-red-700 text-white px-8 py-3 rounded-2xl font-bold shadow-lg transition-all flex items-center gap-2">
+                    <i class="fas fa-user-slash"></i> ลบรายชื่อนักเรียนทั้งหมดในห้องนี้
+                </button>
+            </div>
         </div>
     </main>
 
-    <main id="view-report" class="container mx-auto p-4 md:p-6 flex-1 no-print hidden">
+    <main id="view-report" class="container mx-auto p-4 flex-1 no-print hidden">
         <div class="bg-white rounded-3xl shadow-lg p-8 border border-green-100">
             <h2 class="text-2xl font-bold text-green-800 mb-6 flex items-center gap-2"><i class="fas fa-file-invoice text-yellow-500"></i> รายงานเช็คเวลาเรียนรายเดือน</h2>
             <div class="grid grid-cols-1 md:flex flex-wrap gap-4 bg-slate-50 p-6 rounded-2xl border mb-8 items-end">
@@ -107,9 +106,9 @@
         </div>
     </main>
 
-    <main id="view-summary" class="container mx-auto p-6 flex-1 no-print hidden">
+    <main id="view-summary" class="container mx-auto p-4 flex-1 no-print hidden">
         <div class="bg-white rounded-3xl shadow-xl p-8 border-t-8 border-green-600">
-            <h2 class="text-2xl font-bold text-green-800 mb-6">สรุปผลการมาเรียนรายภาคเรียน</h2>
+            <h2 class="text-2xl font-bold text-green-800 mb-6">สรุปผลการมาเรียน (สถิติรายภาคเรียน)</h2>
             <div class="grid grid-cols-1 md:flex gap-4 bg-green-50 p-6 rounded-2xl mb-8 items-end">
                 <div class="flex-1"><label class="block text-xs font-bold mb-1">ปีการศึกษา</label><select id="sumYear" class="w-full border p-2.5 rounded-xl"><option>2569</option><option>2570</option></select></div>
                 <div class="flex-1"><label class="block text-xs font-bold mb-1">ภาคเรียน</label><select id="sumTerm" class="w-full border p-2.5 rounded-xl"><option>1</option><option>2</option></select></div>
@@ -119,7 +118,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full border-collapse">
                     <thead class="bg-green-800 text-white">
-                        <tr><th class="p-3 border">เลขที่</th><th class="p-3 border text-left">ชื่อ-นามสกุล</th><th class="p-3 border">มา (วัน)</th><th class="p-3 border text-amber-200">สาย</th><th class="p-3 border text-blue-200">ลา</th><th class="p-3 border text-red-200">ขาด</th><th class="p-3 border bg-yellow-400 text-green-900 font-bold italic">เปอร์เซ็นต์ (%)</th></tr>
+                        <tr><th class="p-3 border">ที่</th><th class="p-3 border text-left">ชื่อ-นามสกุล</th><th class="p-3 border">มา</th><th class="p-3 border">สาย</th><th class="p-3 border">ลา</th><th class="p-3 border">ขาด</th><th class="p-3 border bg-yellow-400 text-green-900 font-bold">%</th></tr>
                     </thead>
                     <tbody id="summaryTableBody" class="divide-y font-bold text-center"></tbody>
                 </table>
@@ -127,27 +126,21 @@
         </div>
     </main>
 
-    <div id="printArea" class="hidden print-area"></div>
-
     <div id="modalAdd" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50 no-print">
         <div class="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl">
             <h3 class="text-2xl font-bold mb-6 text-green-900 border-b pb-2">เพิ่มนักเรียนรายคน</h3>
             <div class="space-y-4 text-slate-800">
-                <input type="number" id="mNo" placeholder="เลขที่" class="w-full border p-3 rounded-xl outline-none">
-                <input type="text" id="mName" placeholder="ชื่อ-นามสกุล" class="w-full border p-3 rounded-xl outline-none">
-                <input type="text" id="mNick" placeholder="ชื่อเล่น" class="w-full border p-3 rounded-xl outline-none">
+                <input type="number" id="mNo" placeholder="เลขที่" class="w-full border p-3 rounded-xl outline-none"><input type="text" id="mName" placeholder="ชื่อ-นามสกุล" class="w-full border p-3 rounded-xl outline-none"><input type="text" id="mNick" placeholder="ชื่อเล่น" class="w-full border p-3 rounded-xl outline-none">
                 <div class="flex gap-2 pt-2"><button onclick="saveSingleStudent()" class="flex-1 bg-green-600 text-white py-3 rounded-xl font-bold">บันทึก</button><button onclick="document.getElementById('modalAdd').classList.add('hidden')" class="flex-1 bg-slate-100 py-3 rounded-xl">ปิด</button></div>
             </div>
         </div>
     </div>
 
     <div id="modalImport" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50 no-print">
-        <div class="bg-white rounded-3xl p-8 w-full max-w-2xl shadow-2xl">
-            <h3 class="text-2xl font-bold mb-4 text-green-900 border-b pb-2">นำเข้าจาก Excel</h3>
-            <textarea id="importArea" rows="10" class="w-full border p-4 rounded-xl font-mono text-sm mb-4 outline-none" placeholder="เลขที่ ชื่อจริง ชื่อเล่น"></textarea>
-            <div class="flex gap-2"><button onclick="processImport()" class="flex-1 bg-amber-500 text-white py-3 rounded-xl font-bold">บันทึกทั้งหมด</button><button onclick="document.getElementById('modalImport').classList.add('hidden')" class="flex-1 bg-slate-100 py-3 rounded-xl">ปิด</button></div>
-        </div>
+        <div class="bg-white rounded-3xl p-8 w-full max-w-2xl shadow-2xl"><h3 class="text-2xl font-bold mb-4 text-green-900 border-b pb-2">นำเข้าจาก Excel</h3><textarea id="importArea" rows="10" class="w-full border p-4 rounded-xl font-mono text-sm mb-4 outline-none" placeholder="เลขที่ ชื่อจริง ชื่อเล่น"></textarea><div class="flex gap-2"><button onclick="processImport()" class="flex-1 bg-amber-500 text-white py-3 rounded-xl font-bold">บันทึกทั้งหมด</button><button onclick="document.getElementById('modalImport').classList.add('hidden')" class="flex-1 bg-slate-100 py-3 rounded-xl">ปิด</button></div></div>
     </div>
+
+    <div id="printArea" class="hidden print-area"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -175,9 +168,16 @@
                 document.getElementById('view-'+v).classList.toggle('hidden', v !== view);
                 document.getElementById('tab-'+v).classList.toggle('active', v === view);
             });
+            if(view === 'summary') loadSummary();
         };
 
-        const getBaseRef = () => `school/${document.getElementById('gradeSelect').value}/${document.getElementById('mainYear').value}/${document.getElementById('mainTerm').value}`;
+        // ฟังก์ชันกำหนดที่อยู่ข้อมูลให้แยกชั้นเรียนชัดเจน
+        const getBaseRef = () => {
+            const y = document.getElementById('mainYear').value;
+            const t = document.getElementById('mainTerm').value;
+            const g = document.getElementById('gradeSelect').value;
+            return `school/${g}/${y}/${t}`;
+        };
 
         window.setTermDates = async () => {
             const start = prompt("วันเปิดเทอม (ปปปป-ดด-วว):");
@@ -188,11 +188,18 @@
         window.toggleHoliday = async () => {
             const btn = document.getElementById('btnHoliday');
             if(!btn.classList.contains('bg-red-600')) {
-                const reason = prompt("หยุดเนื่องในโอกาส:");
+                const reason = prompt("วันหยุดเนื่องจาก:");
                 if(reason) await set(ref(db, `${getBaseRef()}/holidays/${dateInput.value}`), reason);
             } else {
                 if(confirm("ยกเลิกวันหยุด?")) await remove(ref(db, `${getBaseRef()}/holidays/${dateInput.value}`));
             }
+        };
+
+        window.updateStatus = async (no, status) => {
+            const currentRef = ref(db, `${getBaseRef()}/attendance/${dateInput.value}/${no}`);
+            onValue(currentRef, async (snap) => {
+                await set(currentRef, snap.val() === status ? null : status);
+            }, { onlyOnce: true });
         };
 
         window.toggleAllPresent = async () => {
@@ -204,11 +211,12 @@
             }, { onlyOnce: true });
         };
 
-        window.updateStatus = async (no, status) => {
-            const currentRef = ref(db, `${getBaseRef()}/attendance/${dateInput.value}/${no}`);
-            onValue(currentRef, async (snap) => {
-                await set(currentRef, snap.val() === status ? null : status);
-            }, { onlyOnce: true });
+        // ฟังก์ชันลบทั้งหมดที่ขอเพิ่ม
+        window.deleteAllStudents = async () => {
+            if(confirm("คำเตือน: คุณต้องการลบรายชื่อนักเรียนทั้งหมดในชั้นเรียนนี้ใช่หรือไม่? ข้อมูลสถานะการเช็คชื่อจะยังคงอยู่ในระบบแต่รายชื่อจะถูกล้างออก")) {
+                await remove(ref(db, `${getBaseRef()}/students`));
+                alert("ลบรายชื่อเรียบร้อยแล้ว");
+            }
         };
 
         function loadData() {
@@ -219,15 +227,14 @@
                 const holidays = data.holidays || {};
                 const termDates = data.termDates || {};
 
-                // อัปเดตข้อมูลเปิด-ปิดเทอมตามสั่ง
-                document.getElementById('termInfoText').innerText = termDates.start ? `กำหนดวันภาคเรียนปัจจุบัน: ${termDates.start} ถึง ${termDates.end}` : "ยังไม่ได้กำหนดช่วงวันเปิด-ปิดภาคเรียน";
+                document.getElementById('termInfoText').innerText = termDates.start ? `📍 ภาคเรียนปัจจุบัน: ${termDates.start} ถึง ${termDates.end}` : "ยังไม่ได้กำหนดวันเปิด-ปิดเทอม";
                 
                 const hReason = holidays[dateInput.value];
                 const btnH = document.getElementById('btnHoliday');
                 const labelH = document.getElementById('holidayLabel');
                 if(hReason) {
                     btnH.innerText = 'ยกเลิกวันหยุด'; btnH.classList.replace('bg-orange-500', 'bg-red-600');
-                    labelH.innerText = `[ วันหยุด ] : ${hReason}`; labelH.classList.remove('hidden');
+                    labelH.innerText = `[ วันหยุดวันนี้ ] : ${hReason}`; labelH.classList.remove('hidden');
                 } else {
                     btnH.innerText = 'กำหนดวันหยุด'; btnH.classList.replace('bg-red-600', 'bg-orange-500');
                     labelH.classList.add('hidden');
@@ -241,7 +248,7 @@
                     tbody.innerHTML += `
                         <tr class="hover:bg-green-50 border-b border-slate-100">
                             <td class="p-4 text-center font-bold text-slate-700">${no}</td>
-                            <td class="p-4 font-bold text-slate-800">${s.name} <small class="text-indigo-500 font-medium">${s.nickname ? '('+s.nickname+')' : ''}</small></td>
+                            <td class="p-4"><div class="font-bold text-slate-800 text-sm">${s.name}</div><div class="text-[11px] text-blue-500 font-medium">${s.nickname ? '('+s.nickname+')' : ''}</div></td>
                             <td class="p-4 text-center">
                                 <div class="flex justify-center gap-1">
                                     <button onclick="updateStatus('${no}', 'มา')" class="px-5 py-1.5 rounded-xl border-2 ${st==='มา'?'bg-green-600 text-white border-green-600':'bg-white text-green-600 border-green-100'}">มา</button>
@@ -276,9 +283,8 @@
                         const dStr = `${year}-${month}-${String(d).padStart(2,'0')}`;
                         const dayOfWeek = new Date(year, month-1, d).getDay();
                         if(d <= daysInMonth) {
-                            if(dayOfWeek === 0 || dayOfWeek === 6 || holidays[dStr]) {
-                                cells += `<td class="holiday-cell"></td>`;
-                            } else {
+                            if(dayOfWeek === 0 || dayOfWeek === 6 || holidays[dStr]) cells += `<td class="holiday-cell"></td>`;
+                            else {
                                 const st = (attendance[dStr] && attendance[dStr][no]) || '';
                                 let m = ''; if(st==='มา'){ m='/'; s.มา++; } else if(st==='ลา'){ m='ล'; s.ลา++; } else if(st==='ขาด'){ m='ข'; s.ขาด++; } else if(st==='สาย'){ m='ส'; s.สาย++; }
                                 cells += `<td>${m}</td>`;
@@ -287,18 +293,7 @@
                     }
                     rows += `<tr><td>${idx+1}</td><td class="name-col font-bold">${students[no].name}</td>${cells}<td>${s.มา}</td><td>${s.ลา}</td><td>${s.ขาด}</td><td>${((s.มา/daysInMonth)*100).toFixed(0)}%</td></tr>`;
                 });
-
-                const html = `
-                    <div style="text-align:center;">
-                        <h2 style="font-size:16px; font-weight:bold; margin-bottom:10px;">แบบบันทึกการมาเรียน เดือน ${monthNames[month-1]} พ.ศ. ${parseInt(year)+543}</h2>
-                        <table class="report-table">
-                            <thead>
-                                <tr><th rowspan="2" class="no-col">ที่</th><th rowspan="2" class="name-col">ชื่อ-สกุล</th><th colspan="31">วันที่</th><th colspan="3" style="width:70px;">สรุป</th><th rowspan="2" class="percent-col">%</th></tr>
-                                <tr>${Array.from({length:31}, (_, i) => `<th class="day-col">${i+1}</th>`).join('')}<th>มา</th><th>ลา</th><th>ขาด</th></tr>
-                            </thead>
-                            <tbody>${rows}</tbody>
-                        </table>
-                    </div>`;
+                const html = `<div style="text-align:center;"><h2 style="font-size:16px; font-weight:bold; margin-bottom:10px;">แบบบันทึกการมาเรียน เดือน ${monthNames[month-1]} พ.ศ. ${parseInt(year)+543}</h2><table class="report-table"><thead><tr><th rowspan="2" class="no-col">ที่</th><th rowspan="2" class="name-col">ชื่อ-สกุล</th><th colspan="31">วันที่</th><th colspan="3" style="width:70px;">สรุป</th><th rowspan="2" class="percent-col">%</th></tr><tr>${Array.from({length:31}, (_, i) => `<th class="day-col">${i+1}</th>`).join('')}<th>มา</th><th>ลา</th><th>ขาด</th></tr></thead><tbody>${rows}</tbody></table></div>`;
                 document.getElementById('reportPreview').innerHTML = html;
                 document.getElementById('printArea').innerHTML = html;
                 document.getElementById('btnPrint').classList.remove('hidden');
