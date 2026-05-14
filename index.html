@@ -3,63 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบเช็คชื่อวิชาวิทยาศาสตร์</title>
+    <title>ระบบเช็คชื่อนักเรียนวิทยาศาสตร์</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap');
-        body { font-family: 'Kanit', sans-serif; background-color: #f1f5f9; }
+        body { font-family: 'Kanit', sans-serif; background-color: #f0f4f8; }
         .sidebar { background: #1e1b4b; color: white; }
     </style>
 </head>
 <body class="flex min-h-screen">
 
-    <div class="w-64 sidebar no-print flex flex-col shadow-xl">
+    <div class="w-64 sidebar no-print flex flex-col shadow-2xl">
         <div class="p-6 text-2xl font-bold border-b border-indigo-900 flex items-center gap-2 text-cyan-400">
-            <i class="fas fa-flask"></i> SCI-CHECK
+            <i class="fas fa-microscope"></i> SCI-CHECK
         </div>
         <nav class="flex-1 mt-6">
-            <button onclick="changeGrade('P3', 'ประถมศึกษาปีที่ 3')" id="btn-P3" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3 transition-all">ป.3</button>
-            <button onclick="changeGrade('P4', 'ประถมศึกษาปีที่ 4')" id="btn-P4" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3 transition-all">ป.4</button>
-            <button onclick="changeGrade('P5', 'ประถมศึกษาปีที่ 5')" id="btn-P5" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3 bg-indigo-700 transition-all">ป.5</button>
-            <button onclick="changeGrade('P6', 'ประถมศึกษาปีที่ 6')" id="btn-P6" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3 transition-all">ป.6</button>
+            <p class="px-6 text-[10px] text-indigo-300 uppercase font-bold mb-4">ชั้นเรียน</p>
+            <button onclick="changeGrade('ป.3')" id="btn-ป.3" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3">ป.3</button>
+            <button onclick="changeGrade('ป.4')" id="btn-ป.4" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3">ป.4</button>
+            <button onclick="changeGrade('ป.5')" id="btn-ป.5" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3 bg-indigo-700">ป.5</button>
+            <button onclick="changeGrade('ป.6')" id="btn-ป.6" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3">ป.6</button>
         </nav>
     </div>
 
     <div class="flex-1 flex flex-col overflow-hidden">
-        <header class="bg-white p-4 shadow-md flex justify-between items-center no-print border-b">
-            <h2 class="text-xl font-bold text-indigo-900" id="titleGrade">ระดับชั้นประถมศึกษาปีที่ 5</h2>
-            <button onclick="document.getElementById('addStudentModal').classList.remove('hidden')" class="bg-indigo-600 text-white px-5 py-2 rounded-lg text-sm shadow hover:bg-indigo-700 transition-all">
-                <i class="fas fa-plus"></i> เพิ่มนักเรียน
+        <header class="bg-white p-4 shadow-sm flex justify-between items-center border-b">
+            <h2 class="text-xl font-bold text-indigo-900" id="titleGrade">ประถมศึกษาปีที่ 5</h2>
+            <button onclick="document.getElementById('modal').classList.remove('hidden')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg font-bold shadow-lg transition-all">
+                <i class="fas fa-plus mr-1"></i> เพิ่มรายชื่อนักเรียน
             </button>
         </header>
 
         <main class="flex-1 p-6 overflow-auto">
-            <div class="bg-white rounded-xl shadow-lg p-6 min-w-[800px]">
+            <div class="bg-white rounded-2xl shadow-xl p-6">
                 <table class="w-full border-collapse">
                     <thead class="bg-slate-50">
                         <tr>
-                            <th class="border border-slate-300 p-2 w-16">เลขที่</th>
-                            <th class="border border-slate-300 p-2 text-left">ชื่อ-นามสกุล</th>
-                            <th class="border border-slate-300 p-2 w-24 text-center">จัดการ</th>
+                            <th class="border-b-2 border-slate-200 p-4 w-20 text-center">เลขที่</th>
+                            <th class="border-b-2 border-slate-200 p-4 text-left">ชื่อ-นามสกุล</th>
+                            <th class="border-b-2 border-slate-200 p-4 w-24 text-center">จัดการ</th>
                         </tr>
                     </thead>
                     <tbody id="studentTableBody">
-                        <tr><td colspan="3" class="p-10 text-center text-slate-400 italic">กำลังเชื่อมต่อฐานข้อมูล...</td></tr>
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
         </main>
     </div>
 
-    <div id="addStudentModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-xl p-8 w-full max-w-sm">
-            <h3 class="font-bold text-xl mb-6 text-slate-800">เพิ่มนักเรียนใหม่</h3>
-            <input type="number" id="newNo" placeholder="เลขที่" class="w-full border p-2 mb-4 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500">
-            <input type="text" id="newName" placeholder="ชื่อ-นามสกุล" class="w-full border p-2 mb-6 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500">
-            <div class="flex gap-2">
-                <button id="saveBtn" class="flex-1 bg-indigo-600 text-white py-3 rounded-lg font-bold">บันทึกข้อมูล</button>
-                <button onclick="document.getElementById('addStudentModal').classList.add('hidden')" class="flex-1 bg-slate-100 py-3 rounded-lg font-bold text-slate-600">ยกเลิก</button>
+    <div id="modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl p-8 w-full max-w-sm shadow-2xl">
+            <h3 class="text-xl font-bold mb-6 text-indigo-900 border-b pb-2">บันทึกนักเรียนใหม่</h3>
+            <div class="space-y-4">
+                <input type="number" id="inputNo" placeholder="เลขที่" class="w-full border-2 border-slate-100 p-3 rounded-xl focus:border-indigo-500 outline-none transition-all">
+                <input type="text" id="inputName" placeholder="ชื่อ-นามสกุล" class="w-full border-2 border-slate-100 p-3 rounded-xl focus:border-indigo-500 outline-none transition-all">
+                <div class="flex gap-3 pt-2">
+                    <button id="saveBtn" class="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-md">บันทึก</button>
+                    <button onclick="document.getElementById('modal').classList.add('hidden')" class="flex-1 bg-slate-100 py-3 rounded-xl font-bold text-slate-500 hover:bg-slate-200">ยกเลิก</button>
+                </div>
             </div>
         </div>
     </div>
@@ -68,6 +70,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+        // ตรวจสอบความถูกต้องจากภาพ image_4 และ image_17 ของคุณครูแล้ว
         const firebaseConfig = {
             apiKey: "AIzaSyCaAWoyfgWqBx8OiJLKuIOMmy602Y3cb9Q",
             authDomain: "mycheckin-ba316.firebaseapp.com",
@@ -81,72 +84,83 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        let currentGrade = 'P5'; // เปลี่ยนจาก ป.5 เป็น P5 (ไม่มีจุด)
+        let currentGrade = 'ป.5';
 
-        window.changeGrade = (gradeId, gradeTitle) => {
-            currentGrade = gradeId;
+        // ฟังก์ชันเปลี่ยนชั้นเรียน
+        window.changeGrade = (grade) => {
+            currentGrade = grade;
             document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('bg-indigo-700'));
-            document.getElementById('btn-'+gradeId).classList.add('bg-indigo-700');
-            document.getElementById('titleGrade').innerText = "ระดับ" + gradeTitle;
-            loadStudents();
+            document.getElementById('btn-'+grade).classList.add('bg-indigo-700');
+            document.getElementById('titleGrade').innerText = "ประถมศึกษาปีที่ " + grade.replace('ป.', '');
+            loadData();
         };
 
-        document.getElementById('saveBtn').addEventListener('click', async () => {
-            const no = document.getElementById('newNo').value;
-            const name = document.getElementById('newName').value;
+        // ฟังก์ชันบันทึกข้อมูล (แก้ปัญหาปุ่มนิ่ง)
+        document.getElementById('saveBtn').onclick = async () => {
+            const no = document.getElementById('inputNo').value;
+            const name = document.getElementById('inputName').value;
             const btn = document.getElementById('saveBtn');
 
-            if(!no || !name) return alert('กรุณากรอกข้อมูลให้ครบ');
+            if(!no || !name) {
+                alert('กรุณากรอกข้อมูลให้ครบครับคุณครู');
+                return;
+            }
 
             btn.disabled = true;
             btn.innerText = 'กำลังบันทึก...';
 
             try {
-                // บันทึกโดยใช้รหัสชั้นเรียนที่ไม่มีจุด
-                await set(ref(db, students/${currentGrade}/${no}), { name: name });
-                alert('บันทึกสำเร็จ!');
-                document.getElementById('newNo').value = '';
-                document.getElementById('newName').value = '';
-                document.getElementById('addStudentModal').classList.add('hidden');
+                // บันทึกลง Path ที่ถูกต้อง
+                await set(ref(db, `students/${currentGrade}/${no}`), { name: name });
+                alert('บันทึกสำเร็จแล้วครับ!');
+                document.getElementById('inputNo').value = '';
+                document.getElementById('inputName').value = '';
+                document.getElementById('modal').classList.add('hidden');
             } catch (error) {
-                alert('บันทึกไม่สำเร็จ! สาเหตุ: ' + error.message);
+                alert('บันทึกไม่ได้! รบกวนคุณครูเช็คหน้า Rules ว่ากด Publish หรือยังครับ: ' + error.message);
             } finally {
                 btn.disabled = false;
-                btn.innerText = 'บันทึกข้อมูล';
-            }
-        });
-
-        window.deleteStudent = (no) => {
-            if(confirm('ลบรายชื่อนักเรียนเลขที่ ' + no + '?')) {
-                remove(ref(db, students/${currentGrade}/${no}));
+                btn.innerText = 'บันทึก';
             }
         };
 
-        function loadStudents() {
-            const tbody = document.getElementById('studentTableBody');
-            onValue(ref(db, students/${currentGrade}), (snapshot) => {
+        // ฟังก์ชันลบข้อมูล
+        window.deleteStd = (no) => {
+            if(confirm(`ลบนักเรียนเลขที่ ${no} ใช่หรือไม่?`)) {
+                remove(ref(db, `students/${currentGrade}/${no}`));
+            }
+        };
+
+        // โหลดข้อมูลแบบเรียลไทม์
+        function loadData() {
+            const listRef = ref(db, `students/${currentGrade}`);
+            onValue(listRef, (snapshot) => {
                 const data = snapshot.val();
+                const tbody = document.getElementById('studentTableBody');
                 tbody.innerHTML = '';
-                if(data) {
-                    Object.keys(data).sort((a, b) => a - b).forEach(no => {
+                
+                if (data) {
+                    Object.keys(data).sort((a,b) => a-b).forEach(no => {
                         tbody.innerHTML += `
-                            <tr class="border-b border-slate-200 hover:bg-indigo-50 transition-all">
-                                <td class="p-3 text-center border-r font-bold text-indigo-900">${no}</td>
-                                <td class="p-3 text-slate-700 font-medium">${data[no].name}</td>
-                                <td class="p-3 text-center">
-                                    <button onclick="deleteStudent('${no}')" class="text-red-400 hover:text-red-600 transition-all">
+                            <tr class="border-b border-slate-100 hover:bg-slate-50 transition-all">
+                                <td class="p-4 text-center font-bold text-indigo-600">${no}</td>
+                                <td class="p-4 text-slate-700">${data[no].name}</td>
+                                <td class="p-4 text-center">
+                                    <button onclick="deleteStd('${no}')" class="text-red-400 hover:text-red-600">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </td>
-                            </tr>`;
+                            </tr>
+                        `;
                     });
                 } else {
-                    tbody.innerHTML = '<tr><td colspan="3" class="p-10 text-center text-slate-400 italic">ยังไม่มีรายชื่อในชั้นนี้</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="3" class="p-10 text-center text-slate-400 italic">ยังไม่มีรายชื่อนักเรียนในชั้นนี้</td></tr>';
                 }
             });
         }
 
-        loadStudents();
+        // เริ่มโหลดข้อมูลครั้งแรก
+        loadData();
     </script>
 </body>
 </html>
