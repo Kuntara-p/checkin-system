@@ -10,10 +10,15 @@
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
         :root { --primary-green: #15803d; }
         body { font-family: 'Sarabun', sans-serif; background-color: #f0fdf4; }
+        
+        /* สไตล์ตารางรายงาน */
         .report-table { border-collapse: collapse; width: 100%; font-size: 10px; }
         .report-table th, .report-table td { border: 1px solid #000; padding: 2px; text-align: center; }
         .text-left-cell { text-align: left !important; padding-left: 5px !important; }
-        .weekend-cell { background-color: #f3f4f6; }
+        
+        /* เปลี่ยนจากสีเทาเป็นสีเขียวทึบตามสั่ง */
+        .weekend-cell { background-color: #166534 !important; color: white; } 
+
         @media print {
             .no-print { display: none !important; }
             body { background: white; }
@@ -107,7 +112,7 @@
     <div id="modalImport" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl p-8 w-full max-w-2xl shadow-2xl">
             <h3 class="text-2xl font-bold mb-2 text-green-900">นำเข้าชื่อจาก Excel / Google Sheet</h3>
-            <p class="text-sm text-slate-500 mb-4">ก๊อปปี้คอลัมน์ [เลขที่] และ [ชื่อ-นามสกุล] จากตารางมาวางในช่องด้านล่าง</p>
+            <p class="text-sm text-slate-500 mb-4">ก๊อปปี้คอลัมน์ [เลขที่] และ [ชื่อ-นามสกุล] มาวางด้านล่าง</p>
             <textarea id="importArea" rows="10" class="w-full border p-4 rounded-xl font-mono text-sm mb-4 placeholder:text-slate-300" placeholder="1 นายเรียนดี รักเรียน&#10;2 นายขยัน หมั่นเพียร"></textarea>
             <div class="flex gap-2">
                 <button onclick="processImport()" class="flex-1 bg-amber-500 text-white py-3 rounded-xl font-bold hover:bg-amber-600">ประมวลผลและบันทึก</button>
@@ -235,7 +240,10 @@
                             else if(status === 'ลา') { mark = 'ล'; stats.ลา++; }
                             else if(status === 'ขาด') { mark = 'ข'; stats.ขาด++; }
                             dayCells += `<td class="${isWeekend?'weekend-cell':''}">${mark}</td>`;
-                        } else { dayCells += `<td class="weekend-cell"></td>`; }
+                        } else { 
+                            // ช่องวันที่เกินของเดือน (เช่น วันที่ 31 ของเดือนเมษายน) เป็นสีเขียวทึบ
+                            dayCells += `<td class="weekend-cell"></td>`; 
+                        }
                     }
                     const totalCount = stats.มา + stats.สาย + stats.ลา + stats.ขาด;
                     const percent = totalCount > 0 ? ((stats.มา/daysInMonth)*100).toFixed(1) : '0.0';
