@@ -28,10 +28,10 @@
         </div>
         <nav class="flex-1 mt-6">
             <p class="px-6 text-[10px] text-indigo-300 uppercase font-bold mb-4">ระดับชั้นที่สอน</p>
-            <button onclick="changeGrade('ป.3')" id="btn-ป.3" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3">ป.3</button>
-            <button onclick="changeGrade('ป.4')" id="btn-ป.4" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3">ป.4</button>
-            <button onclick="changeGrade('ป.5')" id="btn-ป.5" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3 bg-indigo-700">ป.5</button>
-            <button onclick="changeGrade('ป.6')" id="btn-ป.6" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3">ป.6</button>
+            <button onclick="changeGrade('ป.3')" id="btn-ป.3" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3 transition-all">ป.3</button>
+            <button onclick="changeGrade('ป.4')" id="btn-ป.4" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3 transition-all">ป.4</button>
+            <button onclick="changeGrade('ป.5')" id="btn-ป.5" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3 transition-all bg-indigo-700">ป.5</button>
+            <button onclick="changeGrade('ป.6')" id="btn-ป.6" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3 transition-all">ป.6</button>
         </nav>
     </div>
 
@@ -42,8 +42,8 @@
                 <input type="month" id="selectMonth" class="bg-slate-100 border rounded-lg px-3 py-1 text-sm">
             </div>
             <div class="flex gap-2">
-                <button onclick="toggleModal('addStudentModal')" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm"><i class="fas fa-plus"></i> เพิ่มนักเรียน</button>
-                <button onclick="window.print()" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-sm"><i class="fas fa-print"></i> พิมพ์รายงาน</button>
+                <button onclick="toggleModal('addStudentModal')" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm transition-all hover:bg-indigo-700"><i class="fas fa-plus"></i> เพิ่มนักเรียน</button>
+                <button onclick="window.print()" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-sm transition-all hover:bg-slate-900"><i class="fas fa-print"></i> พิมพ์รายงาน</button>
             </div>
         </header>
 
@@ -51,10 +51,10 @@
             <div class="bg-white rounded-xl shadow-lg p-6 min-w-[1200px]">
                 <div class="text-center mb-6">
                     <h3 class="text-xl font-bold">บัญชีลงเวลาเรียนวิชาวิทยาศาสตร์</h3>
-                    <p class="text-sm text-slate-500" id="reportInfo">ชั้นเรียนที่เลือกประจำเดือน</p>
+                    <p class="text-sm text-slate-500" id="reportInfo">ชั้นเรียนประถมศึกษาปีที่ 5 ประจำเดือน</p>
                 </div>
                 <table class="w-full border-collapse border border-slate-300 text-[11px]">
-                    <thead class="bg-slate-50">
+                    <thead class="bg-slate-50 text-slate-700">
                         <tr>
                             <th rowspan="2" class="border border-slate-300 p-1 w-8">เลขที่</th>
                             <th rowspan="2" class="border border-slate-300 p-1 w-40 text-left">ชื่อ-นามสกุล</th>
@@ -63,20 +63,20 @@
                         </tr>
                         <tr id="daysHeader"></tr>
                     </thead>
-                    <tbody id="attendanceTable"></tbody>
+                    <tbody id="attendanceTable" class="text-slate-600"></tbody>
                 </table>
             </div>
         </main>
     </div>
 
-    <div id="addStudentModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 no-print">
-        <div class="bg-white rounded-xl p-6 w-full max-w-sm">
-            <h3 class="font-bold mb-4">เพิ่มรายชื่อนักเรียน</h3>
-            <input type="number" id="newNo" placeholder="เลขที่" class="w-full border p-2 mb-2 rounded">
-            <input type="text" id="newName" placeholder="ชื่อ-นามสกุล" class="w-full border p-2 mb-4 rounded">
+    <div id="addStudentModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 no-print z-50">
+        <div class="bg-white rounded-xl p-6 w-full max-w-sm shadow-2xl">
+            <h3 class="font-bold mb-4 text-lg text-indigo-900">เพิ่มรายชื่อนักเรียน</h3>
+            <input type="number" id="newNo" placeholder="เลขที่" class="w-full border p-2 mb-2 rounded focus:ring-2 focus:ring-indigo-500 outline-none">
+            <input type="text" id="newName" placeholder="ชื่อ-นามสกุล" class="w-full border p-2 mb-4 rounded focus:ring-2 focus:ring-indigo-500 outline-none">
             <div class="flex gap-2">
-                <button onclick="saveStudent()" class="flex-1 bg-indigo-600 text-white py-2 rounded">บันทึก</button>
-                <button onclick="toggleModal('addStudentModal')" class="flex-1 bg-gray-200 py-2 rounded">ยกเลิก</button>
+                <button onclick="saveStudent()" class="flex-1 bg-indigo-600 text-white py-2 rounded font-medium transition-all hover:bg-indigo-700">บันทึก</button>
+                <button onclick="toggleModal('addStudentModal')" class="flex-1 bg-gray-200 py-2 rounded font-medium hover:bg-gray-300">ยกเลิก</button>
             </div>
         </div>
     </div>
@@ -85,6 +85,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+        // แก้ไขค่า Config ให้ถูกต้อง (ลบ null ออกและใช้ URL ที่สมบูรณ์)
         const firebaseConfig = {
             apiKey: "AIzaSyCaAWoyfgWqBx8OiJLKuIOMmy602Y3cb9Q",
             authDomain: "mycheckin-ba316.firebaseapp.com",
@@ -110,6 +111,7 @@
             document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('bg-indigo-700'));
             document.getElementById('btn-'+grade).classList.add('bg-indigo-700');
             document.getElementById('titleGrade').innerText = "ประถมศึกษาปีที่ " + grade.replace('ป.', '');
+            document.getElementById('reportInfo').innerText = "ชั้นเรียนประถมศึกษาปีที่ " + grade.replace('ป.', '') + " ประจำเดือน";
             loadData();
         };
 
@@ -119,13 +121,17 @@
             if(no && name) {
                 set(ref(db, `students/${currentGrade}/${no}`), { name }).then(() => {
                     toggleModal('addStudentModal');
+                    document.getElementById('newNo').value = '';
+                    document.getElementById('newName').value = '';
                     loadData();
-                });
+                }).catch(err => alert("เกิดข้อผิดพลาด: " + err.message));
+            } else {
+                alert("กรุณากรอกเลขที่และชื่อนักเรียน");
             }
         };
 
         window.deleteStudent = (no) => {
-            if(confirm('ลบนักเรียนเลขที่ ' + no + '?')) {
+            if(confirm('ยืนยันการลบนักเรียนเลขที่ ' + no + '?')) {
                 remove(ref(db, `students/${currentGrade}/${no}`)).then(() => loadData());
             }
         };
@@ -161,18 +167,25 @@
             for(let i=1; i<=31; i++) {
                 header.innerHTML += `<th class="border border-slate-300 w-6 ${i > daysInMonth ? 'bg-gray-200' : ''}">${i}</th>`;
             }
-            ['ป่วย','ขาด','ลา','สาย','มา','%'].forEach(h => header.innerHTML += `<th class="border border-slate-300 w-7 bg-indigo-100">${h}</th>`);
+            ['ป่วย','ขาด','ลา','สาย','มา','%'].forEach(h => header.innerHTML += `<th class="border border-slate-300 w-7 bg-indigo-100 font-bold">${h}</th>`);
 
             const tbody = document.getElementById('attendanceTable');
             tbody.innerHTML = '';
 
-            Object.keys(students).sort((a,b)=>a-b).forEach(no => {
+            const sortedKeys = Object.keys(students).sort((a,b)=>Number(a)-Number(b));
+            
+            if(sortedKeys.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="40" class="p-10 text-center text-slate-400">ยังไม่มีรายชื่อนักเรียนในชั้นนี้ กรุณากดปุ่มเพิ่มนักเรียน</td></tr>';
+                return;
+            }
+
+            sortedKeys.forEach(no => {
                 let stats = { ป่วย:0, ขาด:0, ลา:0, สาย:0, มา:0 };
-                let row = `<tr class="hover:bg-slate-50">
+                let row = `<tr class="hover:bg-slate-50 transition-all">
                     <td class="border border-slate-300 text-center p-1">${no}</td>
-                    <td class="border border-slate-300 p-1 font-medium flex justify-between group">
+                    <td class="border border-slate-300 p-1 font-medium flex justify-between items-center group">
                         ${students[no].name} 
-                        <i onclick="deleteStudent(${no})" class="fas fa-trash text-red-300 opacity-0 group-hover:opacity-100 cursor-pointer no-print"></i>
+                        <i onclick="deleteStudent(${no})" class="fas fa-trash text-red-300 opacity-0 group-hover:opacity-100 cursor-pointer no-print transition-all hover:text-red-600 ml-2"></i>
                     </td>`;
                 
                 for(let d=1; d<=31; d++) {
@@ -182,26 +195,32 @@
                     const status = attendance[dateStr] && attendance[dateStr][no] ? attendance[dateStr][no].status : '';
                     if(status) stats[status]++;
                     
-                    row += `<td onclick="check(${no}, ${d})" class="border border-slate-300 text-center cursor-pointer ${isWeekend ? 'weekend' : ''}">
-                        ${status === 'มา' ? '/' : status}
+                    row += `<td onclick="check(${no}, ${d})" class="border border-slate-300 text-center cursor-pointer transition-all hover:bg-indigo-50 ${isWeekend ? 'weekend' : ''}">
+                        ${status === 'มา' ? '<i class="fas fa-check text-green-600 text-[10px]"></i>' : status}
                     </td>`;
                 }
 
-                const total = stats.มา + stats.สาย + stats.ขาด + stats.ป่วย + stats.ลา;
-                const percent = total > 0 ? Math.round((stats.มา / total) * 100) : 0;
+                const totalInMonth = stats.มา + stats.สาย + stats.ขาด + stats.ป่วย + stats.ลา;
+                const percent = totalInMonth > 0 ? Math.round((stats.มา / totalInMonth) * 100) : 0;
 
-                row += `<td class="border border-slate-300 text-center bg-gray-50">${stats.ป่วย}</td>
-                        <td class="border border-slate-300 text-center bg-gray-50">${stats.ขาด}</td>
-                        <td class="border border-slate-300 text-center bg-gray-50">${stats.ลา}</td>
-                        <td class="border border-slate-300 text-center bg-gray-50">${stats.สาย}</td>
-                        <td class="border border-slate-300 text-center bg-green-50 font-bold">${stats.มา}</td>
-                        <td class="border border-slate-300 text-center bg-indigo-50 font-bold">${percent}%</td></tr>`;
+                row += `<td class="border border-slate-300 text-center bg-gray-50">${stats.ป่วย || '-'}</td>
+                        <td class="border border-slate-300 text-center bg-gray-50">${stats.ขาด || '-'}</td>
+                        <td class="border border-slate-300 text-center bg-gray-50">${stats.ลา || '-'}</td>
+                        <td class="border border-slate-300 text-center bg-gray-50">${stats.สาย || '-'}</td>
+                        <td class="border border-slate-300 text-center bg-green-50 font-bold text-green-700">${stats.มา || '-'}</td>
+                        <td class="border border-slate-300 text-center bg-indigo-50 font-bold text-indigo-700">${percent}%</td></tr>`;
                 tbody.innerHTML += row;
             });
         }
 
         monthInput.onchange = loadData;
         loadData();
+        
+        // ทำให้ฟังก์ชันพร้อมเรียกใช้จากภายนอก
+        window.changeGrade = changeGrade;
+        window.saveStudent = saveStudent;
+        window.deleteStudent = deleteStudent;
+        window.check = check;
     </script>
 </body>
 </html>
