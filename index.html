@@ -3,65 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบเช็คชื่อนักเรียนวิทยาศาสตร์</title>
+    <title>ระบบเช็คชื่อวิชาวิทยาศาสตร์</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap');
-        body { font-family: 'Kanit', sans-serif; background-color: #f0f4f8; }
-        .sidebar { background: #1e1b4b; color: white; }
+        body { font-family: 'Kanit', sans-serif; background-color: #f8fafc; }
     </style>
 </head>
-<body class="flex min-h-screen">
+<body class="min-h-screen flex flex-col">
+    <header class="bg-indigo-900 text-white p-5 shadow-lg flex justify-between items-center">
+        <h1 class="text-xl font-bold"><i class="fas fa-flask mr-2 text-cyan-400"></i>ระบบเช็คชื่อนักเรียน ป.5</h1>
+        <button onclick="document.getElementById('modal').classList.remove('hidden')" class="bg-cyan-500 hover:bg-cyan-400 px-6 py-2 rounded-xl font-bold shadow-md transition-all">
+            <i class="fas fa-plus-circle mr-1"></i> เพิ่มนักเรียน
+        </button>
+    </header>
 
-    <div class="w-64 sidebar no-print flex flex-col shadow-2xl">
-        <div class="p-6 text-2xl font-bold border-b border-indigo-900 flex items-center gap-2 text-cyan-400">
-            <i class="fas fa-microscope"></i> SCI-CHECK
+    <main class="p-6 flex-1 max-w-4xl mx-auto w-full">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+            <table class="w-full text-left">
+                <thead class="bg-slate-50 border-b">
+                    <tr>
+                        <th class="p-4 w-20 text-center font-bold text-slate-600">เลขที่</th>
+                        <th class="p-4 font-bold text-slate-600">ชื่อ-นามสกุล</th>
+                        <th class="p-4 w-24 text-center font-bold text-slate-600">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="studentList">
+                    </tbody>
+            </table>
         </div>
-        <nav class="flex-1 mt-6">
-            <p class="px-6 text-[10px] text-indigo-300 uppercase font-bold mb-4">ชั้นเรียน</p>
-            <button onclick="changeGrade('ป.3')" id="btn-ป.3" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3">ป.3</button>
-            <button onclick="changeGrade('ป.4')" id="btn-ป.4" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3">ป.4</button>
-            <button onclick="changeGrade('ป.5')" id="btn-ป.5" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3 bg-indigo-700">ป.5</button>
-            <button onclick="changeGrade('ป.6')" id="btn-ป.6" class="grade-btn w-full text-left px-6 py-4 hover:bg-indigo-800 flex items-center gap-3">ป.6</button>
-        </nav>
-    </div>
-
-    <div class="flex-1 flex flex-col overflow-hidden">
-        <header class="bg-white p-4 shadow-sm flex justify-between items-center border-b">
-            <h2 class="text-xl font-bold text-indigo-900" id="titleGrade">ประถมศึกษาปีที่ 5</h2>
-            <button onclick="document.getElementById('modal').classList.remove('hidden')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg font-bold shadow-lg transition-all">
-                <i class="fas fa-plus mr-1"></i> เพิ่มรายชื่อนักเรียน
-            </button>
-        </header>
-
-        <main class="flex-1 p-6 overflow-auto">
-            <div class="bg-white rounded-2xl shadow-xl p-6">
-                <table class="w-full border-collapse">
-                    <thead class="bg-slate-50">
-                        <tr>
-                            <th class="border-b-2 border-slate-200 p-4 w-20 text-center">เลขที่</th>
-                            <th class="border-b-2 border-slate-200 p-4 text-left">ชื่อ-นามสกุล</th>
-                            <th class="border-b-2 border-slate-200 p-4 w-24 text-center">จัดการ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="studentTableBody">
-                        </tbody>
-                </table>
-            </div>
-        </main>
-    </div>
+    </main>
 
     <div id="modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-2xl p-8 w-full max-w-sm shadow-2xl">
+        <div class="bg-white p-8 rounded-2xl w-full max-w-sm shadow-2xl">
             <h3 class="text-xl font-bold mb-6 text-indigo-900 border-b pb-2">บันทึกนักเรียนใหม่</h3>
-            <div class="space-y-4">
-                <input type="number" id="inputNo" placeholder="เลขที่" class="w-full border-2 border-slate-100 p-3 rounded-xl focus:border-indigo-500 outline-none transition-all">
-                <input type="text" id="inputName" placeholder="ชื่อ-นามสกุล" class="w-full border-2 border-slate-100 p-3 rounded-xl focus:border-indigo-500 outline-none transition-all">
-                <div class="flex gap-3 pt-2">
-                    <button id="saveBtn" class="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-md">บันทึก</button>
-                    <button onclick="document.getElementById('modal').classList.add('hidden')" class="flex-1 bg-slate-100 py-3 rounded-xl font-bold text-slate-500 hover:bg-slate-200">ยกเลิก</button>
-                </div>
+            <input type="number" id="stdNo" placeholder="เลขที่" class="w-full border-2 p-3 rounded-xl mb-4 outline-none focus:border-indigo-500 transition-all">
+            <input type="text" id="stdName" placeholder="ชื่อ-นามสกุล" class="w-full border-2 p-3 rounded-xl mb-6 outline-none focus:border-indigo-500 transition-all">
+            <div class="flex gap-3">
+                <button id="saveBtn" class="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-lg">บันทึก</button>
+                <button onclick="document.getElementById('modal').classList.add('hidden')" class="flex-1 bg-slate-100 py-3 rounded-xl font-bold text-slate-500 hover:bg-slate-200">ปิด</button>
             </div>
         </div>
     </div>
@@ -70,7 +51,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // ตรวจสอบความถูกต้องจากภาพ image_4 และ image_17 ของคุณครูแล้ว
+        // รหัส Firebase ของคุณครู (ตรวจสอบจากภาพ image_4 และ image_17 แล้ว)
         const firebaseConfig = {
             apiKey: "AIzaSyCaAWoyfgWqBx8OiJLKuIOMmy602Y3cb9Q",
             authDomain: "mycheckin-ba316.firebaseapp.com",
@@ -84,83 +65,48 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        let currentGrade = 'ป.5';
-
-        // ฟังก์ชันเปลี่ยนชั้นเรียน
-        window.changeGrade = (grade) => {
-            currentGrade = grade;
-            document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('bg-indigo-700'));
-            document.getElementById('btn-'+grade).classList.add('bg-indigo-700');
-            document.getElementById('titleGrade').innerText = "ประถมศึกษาปีที่ " + grade.replace('ป.', '');
-            loadData();
-        };
-
-        // ฟังก์ชันบันทึกข้อมูล (แก้ปัญหาปุ่มนิ่ง)
+        // ฟังก์ชันบันทึก
         document.getElementById('saveBtn').onclick = async () => {
-            const no = document.getElementById('inputNo').value;
-            const name = document.getElementById('inputName').value;
-            const btn = document.getElementById('saveBtn');
-
-            if(!no || !name) {
-                alert('กรุณากรอกข้อมูลให้ครบครับคุณครู');
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerText = 'กำลังบันทึก...';
+            const no = document.getElementById('stdNo').value;
+            const name = document.getElementById('stdName').value;
+            if(!no || !name) return alert("กรุณากรอกเลขที่และชื่อด้วยครับ");
 
             try {
-                // บันทึกลง Path ที่ถูกต้อง
-                await set(ref(db, `students/${currentGrade}/${no}`), { name: name });
-                alert('บันทึกสำเร็จแล้วครับ!');
-                document.getElementById('inputNo').value = '';
-                document.getElementById('inputName').value = '';
+                // บันทึกไปที่โฟลเดอร์ students
+                await set(ref(db, 'students/' + no), { name: name });
+                alert("บันทึกสำเร็จแล้วครับ!");
+                document.getElementById('stdNo').value = '';
+                document.getElementById('stdName').value = '';
                 document.getElementById('modal').classList.add('hidden');
-            } catch (error) {
-                alert('บันทึกไม่ได้! รบกวนคุณครูเช็คหน้า Rules ว่ากด Publish หรือยังครับ: ' + error.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerText = 'บันทึก';
+            } catch (e) {
+                alert("บันทึกไม่ได้! รบกวนคุณครูเช็คหน้า Rules ใน Firebase ให้เป็นสีส้มก่อนนะครับ: " + e.message);
             }
         };
 
-        // ฟังก์ชันลบข้อมูล
-        window.deleteStd = (no) => {
-            if(confirm(`ลบนักเรียนเลขที่ ${no} ใช่หรือไม่?`)) {
-                remove(ref(db, `students/${currentGrade}/${no}`));
-            }
+        // ฟังก์ชันลบ
+        window.del = (no) => {
+            if(confirm("ต้องการลบเลขที่ " + no + " ใช่หรือไม่?")) remove(ref(db, 'students/' + no));
         };
 
-        // โหลดข้อมูลแบบเรียลไทม์
-        function loadData() {
-            const listRef = ref(db, `students/${currentGrade}`);
-            onValue(listRef, (snapshot) => {
-                const data = snapshot.val();
-                const tbody = document.getElementById('studentTableBody');
-                tbody.innerHTML = '';
-                
-                if (data) {
-                    Object.keys(data).sort((a,b) => a-b).forEach(no => {
-                        tbody.innerHTML += `
-                            <tr class="border-b border-slate-100 hover:bg-slate-50 transition-all">
-                                <td class="p-4 text-center font-bold text-indigo-600">${no}</td>
-                                <td class="p-4 text-slate-700">${data[no].name}</td>
-                                <td class="p-4 text-center">
-                                    <button onclick="deleteStd('${no}')" class="text-red-400 hover:text-red-600">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        `;
-                    });
-                } else {
-                    tbody.innerHTML = '<tr><td colspan="3" class="p-10 text-center text-slate-400 italic">ยังไม่มีรายชื่อนักเรียนในชั้นนี้</td></tr>';
-                }
-            });
-        }
-
-        // เริ่มโหลดข้อมูลครั้งแรก
-        loadData();
+        // ดึงข้อมูลมาแสดงแบบ Real-time
+        onValue(ref(db, 'students'), (snap) => {
+            const data = snap.val();
+            const list = document.getElementById('studentList');
+            list.innerHTML = "";
+            if(data) {
+                Object.keys(data).sort((a,b)=>a-b).forEach(no => {
+                    list.innerHTML += `<tr class="border-b hover:bg-slate-50 transition-all">
+                        <td class="p-4 text-center font-bold text-indigo-600">${no}</td>
+                        <td class="p-4 text-slate-700">${data[no].name}</td>
+                        <td class="p-4 text-center">
+                            <button onclick="del('${no}')" class="text-red-400 hover:text-red-600"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>`;
+                });
+            } else {
+                list.innerHTML = '<tr><td colspan="3" class="p-10 text-center text-slate-400 italic font-light">ยังไม่มีรายชื่อนักเรียน</td></tr>';
+            }
+        });
     </script>
 </body>
 </html>
