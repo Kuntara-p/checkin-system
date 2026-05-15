@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCIENCE SMART SYSTEM - BAN KHUAN NIANG SCHOOL V27 (Design Update)</title>
+    <title>SCIENCE SMART SYSTEM - BAN KHUAN NIANG SCHOOL V27 (Modern Compact)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Sarabun', sans-serif; background-color: #f8fafc; }
         
+        /* สไตล์ตารางรายงานคงเดิม 100% */
         .report-table { border-collapse: collapse; width: 100%; table-layout: fixed; font-size: 9px; border: 1px solid black; background: white; }
         .report-table th, .report-table td { border: 1px solid black; padding: 2px 0; text-align: center; height: 18px; color: black; }
         .day-col { width: 20px !important; }
@@ -26,331 +27,33 @@
             @page { size: A4 landscape; margin: 5mm; }
         }
         
-        .nav-tab { border-bottom: 3px solid transparent; transition: all 0.3s; }
-        .nav-tab.active { border-bottom: 3px solid #facc15; color: #facc15; font-weight: bold; }
+        .nav-tab { transition: all 0.3s; border-bottom: 3px solid transparent; }
+        .nav-tab.active { border-bottom-color: #facc15; color: #facc15; font-weight: bold; }
         .btn-locked { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+        /* ปุ่มขนาดกะทัดรัด (Compact Style) */
+        .btn-compact { 
+            padding: 0.4rem 0.75rem; 
+            font-size: 0.75rem; 
+            font-weight: 600; 
+            border-radius: 0.5rem; 
+            transition: all 0.2s; 
+            display: inline-flex; 
+            items-center: center; 
+            gap: 0.4rem;
+        }
+        .btn-compact:active { transform: scale(0.95); }
         
-        /* ปุ่มจิ๋วสไตล์ทันสมัย */
-        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.6rem; transition: all 0.2s; }
-        .btn-sm:active { transform: scale(0.95); }
+        /* ปุ่มเช็คชื่อในตาราง */
+        .btn-check {
+            padding: 0.25rem 0.6rem;
+            font-size: 0.7rem;
+            font-weight: bold;
+            border-radius: 0.4rem;
+            border: 1px solid transparent;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col text-slate-800">
 
-    <header class="bg-green-800 text-white no-print shadow-md sticky top-0 z-40">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center py-3">
-                <div class="flex items-center gap-2 mb-2 md:mb-0">
-                    <i class="fas fa-flask text-lime-400 text-xl"></i>
-                    <h1 class="text-lg font-bold tracking-tight">SCIENCE SMART SYSTEM</h1>
-                </div>
-                <div class="flex gap-4">
-                    <button onclick="showView('checkin')" id="tab-checkin" class="nav-tab active py-1 px-2 text-sm">เช็คชื่อ</button>
-                    <button onclick="showView('report')" id="tab-report" class="nav-tab py-1 px-2 text-sm">รายงานเดือน</button>
-                    <button onclick="showView('summary')" id="tab-summary" class="nav-tab py-1 px-2 text-sm">สรุปเทอม</button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main id="view-checkin" class="container mx-auto p-4 flex-1 no-print">
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-4">
-            <div class="flex flex-wrap items-center justify-between gap-4">
-                <div class="flex flex-wrap items-center gap-3">
-                    <div class="flex flex-col">
-                        <label class="text-[10px] uppercase font-bold text-slate-400 ml-1">ปี/ภาคเรียน</label>
-                        <div class="flex gap-1">
-                            <select id="mainYear" onchange="loadData()" class="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-sm font-bold text-slate-700 outline-none">
-                                <option>2569</option><option>2570</option>
-                            </select>
-                            <select id="mainTerm" onchange="loadData()" class="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-sm font-bold text-slate-700 outline-none">
-                                <option>1</option><option>2</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="flex flex-col">
-                        <label class="text-[10px] uppercase font-bold text-slate-400 ml-1">ระดับชั้น</label>
-                        <select id="gradeSelect" onchange="loadData()" class="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-sm font-bold text-slate-700 outline-none">
-                            <option value="P3">ป.3</option><option value="P4">ป.4</option><option value="P5" selected>ป.5</option><option value="P6">ป.6</option>
-                        </select>
-                    </div>
-                    <div class="flex flex-col">
-                        <label class="text-[10px] uppercase font-bold text-slate-400 ml-1">เลือกวันที่</label>
-                        <input type="date" id="selectDate" onchange="loadData()" class="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-sm font-bold text-slate-700 outline-none">
-                    </div>
-                </div>
-
-                <div class="flex flex-wrap gap-2">
-                    <button onclick="setTermDates()" class="btn-sm bg-blue-500 hover:bg-blue-600 text-white shadow-sm"><i class="fas fa-calendar-day mr-1"></i> เทอม</button>
-                    <button onclick="toggleNoClass()" id="btnNoClass" class="btn-sm bg-purple-500 hover:bg-purple-600 text-white shadow-sm"><i class="fas fa-book-reader mr-1"></i> ไม่มีคาบ</button>
-                    <button onclick="toggleHoliday()" id="btnHoliday" class="btn-sm bg-orange-400 hover:bg-orange-500 text-white shadow-sm"><i class="fas fa-umbrella-beach mr-1"></i> วันหยุด</button>
-                    <button onclick="toggleAllPresent()" id="btnAll" class="btn-sm bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm"><i class="fas fa-check-double mr-1"></i> มาทุกคน</button>
-                    <button onclick="clearAttendanceData()" class="btn-sm bg-rose-500 hover:bg-rose-600 text-white shadow-sm"><i class="fas fa-eraser mr-1"></i> ล้างข้อมูล</button>
-                    <button onclick="document.getElementById('modalImport').classList.remove('hidden')" class="btn-sm bg-amber-500 hover:bg-amber-600 text-white shadow-sm"><i class="fas fa-file-import mr-1"></i> นำเข้า</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="termInfoText" class="mb-3 text-[11px] font-medium text-blue-600 px-2 italic"></div>
-        <div id="holidayLabel" class="hidden mb-3 p-3 bg-red-50 text-red-600 rounded-xl border border-red-100 font-bold text-center text-sm shadow-sm"></div>
-
-        <div id="checkinArea" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-200">
-            <table class="w-full text-left">
-                <thead class="bg-slate-50 border-b border-slate-200">
-                    <tr class="text-slate-500 uppercase text-[11px] font-bold">
-                        <th class="p-3 w-16 text-center">ที่</th>
-                        <th class="p-3">ชื่อ - นามสกุล (ชื่อเล่น)</th>
-                        <th class="p-3 text-center">บันทึกสถานะการมาเรียน</th>
-                        <th class="p-3 w-16 text-center">ลบ</th>
-                    </tr>
-                </thead>
-                <tbody id="studentTableBody" class="divide-y divide-slate-100"></tbody>
-            </table>
-            <div class="p-4 bg-slate-50/50 flex justify-center border-t border-slate-100">
-                <button onclick="deleteAllStudents()" class="text-rose-500 hover:text-rose-700 text-xs font-bold transition-colors">
-                    <i class="fas fa-trash-alt mr-1"></i> ลบรายชื่อนักเรียนทั้งหมดในห้องนี้
-                </button>
-            </div>
-        </div>
-    </main>
-
-    <main id="view-report" class="container mx-auto p-4 md:p-6 flex-1 no-print hidden">
-        <div class="bg-white rounded-2xl shadow-sm p-6 border border-slate-200">
-            <h2 class="text-xl font-bold text-slate-700 mb-6 flex items-center gap-2"><i class="fas fa-file-invoice text-blue-500"></i> รายงานเช็คเวลาเรียนรายเดือน</h2>
-            <div class="flex flex-wrap gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100 mb-6 items-end">
-                <div class="w-48"><label class="text-[10px] font-bold text-slate-400 block mb-1 uppercase">เลือกเดือน/ปี</label><input type="month" id="reportMonth" class="w-full border border-slate-200 p-2 rounded-lg text-sm outline-none"></div>
-                <button onclick="generateReport()" class="btn-sm bg-indigo-600 text-white px-6">ค้นหา</button>
-                <button onclick="window.print()" id="btnPrint" class="hidden btn-sm bg-rose-500 text-white px-6">พิมพ์ PDF</button>
-            </div>
-            <div id="reportPreview" class="overflow-x-auto p-2 bg-white rounded-lg border border-slate-100"></div>
-        </div>
-    </main>
-
-    <main id="view-summary" class="container mx-auto p-4 flex-1 no-print hidden">
-        <div class="bg-white rounded-2xl shadow-sm p-6 border border-slate-200">
-            <h2 class="text-xl font-bold text-slate-700 mb-6 text-center underline decoration-green-500 decoration-4 underline-offset-8">สรุปสถิติรายภาคเรียน</h2>
-            <div class="flex justify-center mb-6"><button onclick="loadSummary()" class="btn-sm bg-green-600 text-white px-10 shadow-md">ดึงข้อมูลล่าสุด</button></div>
-            <div class="overflow-x-auto">
-                <table class="w-full border-collapse border border-slate-200 rounded-lg overflow-hidden">
-                    <thead class="bg-slate-800 text-white text-xs uppercase">
-                        <tr><th class="p-3 border border-slate-700">ที่</th><th class="p-3 border border-slate-700 text-left">ชื่อ-นามสกุล</th><th class="p-3 border border-slate-700">มา</th><th class="p-3 border border-slate-700 text-blue-300">ลา</th><th class="p-3 border border-slate-700 text-rose-300">ขาด</th><th class="p-3 border border-slate-700 text-amber-300">สาย</th><th class="p-3 border border-slate-700 bg-yellow-400 text-slate-900 font-bold">%</th></tr>
-                    </thead>
-                    <tbody id="summaryTableBody" class="divide-y text-center bg-white text-sm font-medium"></tbody>
-                </table>
-            </div>
-        </div>
-    </main>
-
-    <div id="modalImport" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 no-print">
-        <div class="bg-white rounded-2xl p-6 w-full max-w-2xl shadow-xl border border-slate-200">
-            <h3 class="text-lg font-bold mb-4 text-slate-800 border-b pb-2">นำเข้าจาก Excel</h3>
-            <textarea id="importArea" rows="10" class="w-full border border-slate-200 p-4 rounded-xl font-mono text-xs mb-4 outline-none focus:ring-2 focus:ring-amber-400" placeholder="เลขที่ ชื่อจริง ชื่อเล่น"></textarea>
-            <div class="flex gap-2"><button onclick="processImport()" class="flex-1 bg-amber-500 text-white py-2 rounded-lg font-bold">บันทึกทั้งหมด</button><button onclick="document.getElementById('modalImport').classList.add('hidden')" class="flex-1 bg-slate-100 text-slate-500 py-2 rounded-lg font-bold">ปิด</button></div>
-        </div>
-    </div>
-
-    <div id="printArea" class="hidden print-area"></div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, onValue, remove, update, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCaAWoyfgWqBx8OiJLKuIOMmy602Y3cb9Q",
-            authDomain: "mycheckin-ba316.firebaseapp.com",
-            databaseURL: "https://mycheckin-ba316-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "mycheckin-ba316",
-            storageBucket: "mycheckin-ba316.firebasestorage.app",
-            messagingSenderId: "70860501032",
-            appId: "1:70860501032:web:6cf057afbdd8330048451d"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        const dateInput = document.getElementById('selectDate');
-        dateInput.valueAsDate = new Date();
-        document.getElementById('reportMonth').value = new Date().toISOString().substring(0, 7);
-
-        window.showView = (view) => {
-            ['checkin', 'report', 'summary'].forEach(v => {
-                document.getElementById('view-'+v).classList.toggle('hidden', v !== view);
-                document.getElementById('tab-'+v).classList.toggle('active', v === view);
-            });
-            if(view === 'summary') loadSummary();
-        };
-
-        const getBaseRef = () => `school/${document.getElementById('gradeSelect').value}/${document.getElementById('mainYear').value}/${document.getElementById('mainTerm').value}`;
-
-        window.loadData = () => {
-            onValue(ref(db, getBaseRef()), (snap) => {
-                const data = snap.val() || {}, students = data.students || {}, attendance = (data.attendance && data.attendance[dateInput.value]) || {}, termDates = data.termDates || {}, holidays = data.holidays || {};
-                
-                const d = new Date(dateInput.value);
-                const isWeekend = (d.getDay() === 0 || d.getDay() === 6);
-                let isTermActive = termDates.start ? (dateInput.value >= termDates.start && dateInput.value <= termDates.end) : false;
-
-                const labelH = document.getElementById('holidayLabel'); const area = document.getElementById('studentTableBody');
-                const btnNoClass = document.getElementById('btnNoClass');
-
-                const isNoClass = (holidays[dateInput.value] === "ไม่มีคาบเรียน");
-                btnNoClass.classList.toggle('bg-red-700', isNoClass);
-                btnNoClass.innerText = isNoClass ? 'มีคาบเรียน' : 'ไม่มีคาบ';
-
-                if(holidays[dateInput.value]) {
-                    labelH.innerText = (holidays[dateInput.value] === "ไม่มีคาบเรียน") ? "📅 วันนี้ไม่มีการเรียนการสอน (ไม่นับวันทำการ)" : `[ วันหยุดพิเศษ ] : ${holidays[dateInput.value]}`;
-                    labelH.classList.remove('hidden'); area.classList.add('btn-locked');
-                } else if(isWeekend || !isTermActive) {
-                    labelH.innerText = isWeekend ? "⚠️ วันเสาร์-อาทิตย์ ไม่สามารถเช็คชื่อได้" : "⚠️ อยู่นอกช่วงภาคเรียน ไม่สามารถเช็คชื่อได้";
-                    labelH.classList.remove('hidden'); area.classList.add('btn-locked');
-                } else { labelH.classList.add('hidden'); area.classList.remove('btn-locked'); }
-
-                document.getElementById('termInfoText').innerText = termDates.start ? `📍 ช่วงเปิดเทอม: ${termDates.start} ถึง ${termDates.end}` : "⚠️ ยังไม่ได้กำหนดเปิด-ปิดเทอม";
-                
-                const presentCount = Object.values(attendance).filter(v => v === 'มา').length;
-                document.getElementById('btnAll').innerText = (presentCount > 0 && presentCount === Object.keys(students).length) ? 'ยกเลิกทุกคน' : 'มาทุกคน';
-
-                const tbody = document.getElementById('studentTableBody'); tbody.innerHTML = '';
-                Object.keys(students).sort((a,b)=>a-b).forEach(no => {
-                    const st = attendance[no] || '', s = students[no];
-                    tbody.innerHTML += `<tr>
-                        <td class="p-3 text-center font-bold text-slate-400 text-xs">${no}</td>
-                        <td class="p-3 font-bold text-slate-700 text-sm">${s.name} <span class="text-blue-500 font-normal ml-1">(${s.nickname||''})</span></td>
-                        <td class="p-3 text-center"><div class="flex justify-center gap-1">
-                            <button onclick="updateStatus('${no}', 'มา')" class="btn-sm border ${st==='มา'?'bg-emerald-600 text-white border-emerald-600':'bg-white text-emerald-600 border-emerald-100'}">มา</button>
-                            <button onclick="updateStatus('${no}', 'ขาด')" class="btn-sm border ${st==='ขาด'?'bg-rose-600 text-white border-rose-600':'bg-white text-rose-600 border-rose-100'}">ขาด</button>
-                            <button onclick="updateStatus('${no}', 'ลา')" class="btn-sm border ${st==='ลา'?'bg-sky-600 text-white border-sky-600':'bg-white text-sky-600 border-sky-100'}">ลา</button>
-                            <button onclick="updateStatus('${no}', 'สาย')" class="btn-sm border ${st==='สาย'?'bg-amber-500 text-white border-amber-500':'bg-white text-amber-500 border-amber-100'}">สาย</button>
-                        </div></td>
-                        <td class="p-3 text-center"><button onclick="removeStudent('${no}')" class="text-slate-300 hover:text-rose-500 transition-colors"><i class="fas fa-trash"></i></button></td></tr>`;
-                });
-            });
-        };
-
-        window.clearAttendanceData = async () => {
-            const mode = prompt("เลือกรูปแบบการล้างข้อมูล:\n1: ล้างเฉพาะเดือนที่เลือกอยู่ในปฏิทิน\n2: ล้างข้อมูลทั้งเทอมของห้องนี้\n(พิมพ์ตัวเลข 1 หรือ 2)");
-            if (mode === "1" || mode === "2") {
-                const check = prompt("พิมพ์คำว่า confirm เพื่อยืนยันการลบข้อมูล (รายชื่อนักเรียนจะไม่หาย)");
-                if (check === "confirm") {
-                    const baseRefPath = getBaseRef();
-                    if (mode === "1") {
-                        const selectedMonth = dateInput.value.substring(0, 7);
-                        const snapshot = await get(ref(db, `${baseRefPath}/attendance`));
-                        const attendance = snapshot.val();
-                        if (attendance) {
-                            const updates = {};
-                            Object.keys(attendance).forEach(date => { if (date.startsWith(selectedMonth)) updates[`${baseRefPath}/attendance/${date}`] = null; });
-                            await update(ref(db), updates); alert("ล้างข้อมูลเดือน " + selectedMonth + " แล้ว");
-                        }
-                    } else { await remove(ref(db, `${baseRefPath}/attendance`)); alert("ล้างข้อมูลทั้งเทอมแล้ว"); }
-                    loadData();
-                }
-            }
-        };
-
-        window.toggleNoClass = async () => {
-            const path = `${getBaseRef()}/holidays/${dateInput.value}`;
-            onValue(ref(db, path), async (snap) => {
-                if(snap.val() === "ไม่มีคาบเรียน") await remove(ref(db, path));
-                else await set(ref(db, path), "ไม่มีคาบเรียน");
-            }, { onlyOnce: true });
-        };
-
-        window.toggleHoliday = async () => {
-            const path = `${getBaseRef()}/holidays/${dateInput.value}`;
-            onValue(ref(db, path), async (snap) => {
-                if(!snap.val() || snap.val() === "ไม่มีคาบเรียน") {
-                    const reason = prompt("วันหยุดเนื่องจาก:"); if(reason) await set(ref(db, path), reason);
-                } else { if(confirm("ยกเลิกวันหยุด?")) await remove(ref(db, path)); }
-            }, { onlyOnce: true });
-        };
-
-        window.generateReport = () => {
-            const [year, month] = document.getElementById('reportMonth').value.split('-');
-            const daysInMonth = new Date(year, month, 0).getDate();
-            const monthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
-            onValue(ref(db, getBaseRef()), (snap) => {
-                const data = snap.val() || {}, students = data.students || {}, attendance = data.attendance || {}, holidays = data.holidays || {}, termDates = data.termDates || {};
-                let rows = ''; let activeDaysTotal = 0;
-                for(let d=1; d<=daysInMonth; d++) {
-                    const ds = `${year}-${month}-${String(d).padStart(2,'0')}`, dt = new Date(year, month-1, d);
-                    const isWeekend = (dt.getDay() === 0 || dt.getDay() === 6);
-                    const isTerm = termDates.start ? (ds >= termDates.start && ds <= termDates.end) : false;
-                    if(!isWeekend && !holidays[ds] && isTerm) activeDaysTotal++;
-                }
-                Object.keys(students).sort((a,b)=>a-b).forEach((no, idx) => {
-                    let dCells = ''; let s = { มา: 0, สาย: 0, ลา: 0, ขาด: 0 };
-                    for(let d=1; d<=daysInMonth; d++) {
-                        const ds = `${year}-${month}-${String(d).padStart(2,'0')}`, dt = new Date(year, month-1, d);
-                        if(dt.getDay() === 0 || dt.getDay() === 6 || holidays[ds]) dCells += `<td class="holiday-cell"></td>`;
-                        else {
-                            const st = (attendance[ds] && attendance[ds][no]) || '';
-                            if(st==='มา'){ dCells += `<td>/</td>`; s.มา++; } 
-                            else if(st==='ลา'){ dCells += `<td>ล</td>`; s.ลา++; } 
-                            else if(st==='ขาด'){ dCells += `<td>ข</td>`; s.ขาด++; } 
-                            else if(st==='สาย'){ dCells += `<td>ส</td>`; s.สาย++; }
-                            else dCells += `<td></td>`;
-                        }
-                    }
-                    const per = activeDaysTotal > 0 ? ((s.มา/activeDaysTotal)*100).toFixed(0) : '0';
-                    rows += `<tr><td>${idx+1}</td><td class="name-col font-bold">${students[no].name}</td>${dCells}<td>${s.มา}</td><td>${s.สาย}</td><td>${s.ลา}</td><td>${s.ขาด}</td><td class="font-bold">${per}%</td></tr>`;
-                });
-                const html = `<div style="text-align:center;"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Seal_of_the_Office_of_the_Basic_Education_Commission.png" style="width:40px; margin-bottom:5px;"><h2 style="font-size:16px; font-weight:bold; margin:0;">โรงเรียนบ้านควนเนียง</h2><p style="font-size:12px; margin:2px;">แบบบันทึกการมาเรียน ประจำเดือน ${monthNames[month-1]} พุทธศักราช ${parseInt(year)+543}</p><table class="report-table"><thead><tr><th rowspan="2" class="no-col">ที่</th><th rowspan="2" class="name-col">ชื่อ-สกุล</th><th colspan="${daysInMonth}">วันที่</th><th colspan="4" style="width:100px;">สรุป</th><th rowspan="2" class="percent-col">%</th></tr><tr>${Array.from({length:daysInMonth}, (_, i) => `<th class="day-col">${i+1}</th>`).join('')}<th class="stat-col">มา</th><th class="stat-col">สาย</th><th class="stat-col">ลา</th><th class="stat-col">ขาด</th></tr></thead><tbody>${rows}</tbody></table><div style="text-align:left; font-size:9px; margin-top:10px;">สัญลักษณ์: / = มา, ส = สาย, ล = ลา, ข = ขาด | *วันทำการจริงในเดือนนี้: ${activeDaysTotal} วัน</div></div>`;
-                document.getElementById('reportPreview').innerHTML = html; document.getElementById('printArea').innerHTML = html; document.getElementById('btnPrint').classList.remove('hidden');
-            });
-        };
-
-        window.loadSummary = () => {
-            const y = document.getElementById('sumYear').value, t = document.getElementById('sumTerm').value, g = document.getElementById('sumGrade').value;
-            onValue(ref(db, `school/${g}/${y}/${t}`), (snap) => {
-                const data = snap.val() || {}, termDates = data.termDates || {}, students = data.students || {}, attendance = data.attendance || {}, holidays = data.holidays || {};
-                if(!termDates.start) return;
-                let schoolDays = 0; const startDate = new Date(termDates.start); const endDate = new Date(termDates.end);
-                for(let d=new Date(startDate); d<=endDate; d.setDate(d.getDate()+1)) {
-                    const ds = d.toISOString().split('T')[0]; if(d.getDay()!==0 && d.getDay()!==6 && !holidays[ds]) schoolDays++;
-                }
-                const tbody = document.getElementById('summaryTableBody'); tbody.innerHTML = '';
-                Object.keys(students).sort((a,b)=>a-b).forEach(no => {
-                    let s = { มา: 0, ลา: 0, สาย: 0, ขาด: 0 };
-                    Object.keys(attendance).forEach(date => { if(date >= termDates.start && date <= termDates.end) { const st = attendance[date][no]; if(st) s[st]++; } });
-                    const per = schoolDays > 0 ? ((s.มา/schoolDays)*100).toFixed(1) : '0';
-                    tbody.innerHTML += `<tr><td class="p-3 border border-slate-100">${no}</td><td class="p-3 border border-slate-100 text-left font-bold text-slate-700">${students[no].name}</td><td class="p-3 border border-slate-100 text-emerald-600">${s.มา}</td><td class="p-3 border border-slate-100 text-sky-600">${s.ลา}</td><td class="p-3 border border-slate-100 text-rose-600">${s.ขาด}</td><td class="p-3 border border-slate-100 text-amber-500">${s.สาย}</td><td class="p-3 border border-slate-100 bg-yellow-50 font-bold text-slate-900">${per}%</td></tr>`;
-                });
-            });
-        };
-
-        window.updateStatus = async (no, status) => {
-            const currentRef = ref(db, `${getBaseRef()}/attendance/${dateInput.value}/${no}`);
-            onValue(currentRef, async (snap) => { await set(currentRef, snap.val() === status ? null : status); }, { onlyOnce: true });
-        };
-
-        window.toggleAllPresent = async () => {
-            const isCancel = document.getElementById('btnAll').innerText.includes("ยกเลิก");
-            onValue(ref(db, `${getBaseRef()}/students`), async (snap) => {
-                const students = snap.val() || {}, updates = {};
-                Object.keys(students).forEach(no => updates[`${getBaseRef()}/attendance/${dateInput.value}/${no}`] = isCancel ? null : 'มา');
-                await update(ref(db), updates);
-            }, { onlyOnce: true });
-        };
-
-        window.setTermDates = async () => {
-            const start = prompt("วันเปิดภาคเรียน (ปปปป-ดด-วว):", "2026-05-15"), end = prompt("วันปิดภาคเรียน (ปปปป-ดด-วว):", "2026-10-10");
-            if(start && end) await set(ref(db, `${getBaseRef()}/termDates`), { start, end });
-        };
-
-        window.processImport = async () => {
-            const raw = document.getElementById('importArea').value.trim(); if(!raw) return;
-            const updates = {}; const path = getBaseRef();
-            raw.split('\n').forEach(line => {
-                const p = line.trim().split(/\s+/);
-                if (p.length >= 2) updates[`${path}/students/${p[0]}`] = { name: p.slice(1, p.length > 2 ? -1 : undefined).join(' '), nickname: p.length > 2 ? p[p.length - 1] : '' };
-            });
-            await update(ref(db), updates); document.getElementById('modalImport').classList.add('hidden');
-        };
-
-        window.removeStudent = (no) => { if(confirm('ลบ?')) remove(ref(db, `${getBaseRef()}/students/${no}`)); };
-        window.deleteAllStudents = () => { if(confirm('ลบรายชื่อทั้งหมด?')) remove(ref(db, `${getBaseRef()}/students`)); };
-        loadData();
-    </script>
-</body>
-</html>
+    <header class="bg-green-800 text-white no-print shadow-md sticky top-0 z-5
